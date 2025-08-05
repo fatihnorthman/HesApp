@@ -1,3 +1,49 @@
 <resources>
     <string name="app_name">HesApp</string>
+    
+    <!-- Navigation -->
+    <string name="dashboard">Ana Sayfa</string>
+    <string name="transactions">İşlemler</string>
+    <string name="contacts">Kişiler</string>
+    <string name="reports">Raporlar</string>
+    <string name="settings">Ayarlar</string>
+    
+    <!-- Common -->
+    <string name="add">Ekle</string>
+    <string name="edit">Düzenle</string>
+    <string name="delete">Sil</string>
+    <string name="save">Kaydet</string>
+    <string name="cancel">İptal</string>
+    <string name="search">Ara</string>
+    <string name="filter">Filtrele</string>
+    <string name="total">Toplam</string>
+    <string name="amount">Tutar</string>
+    <string name="date">Tarih</string>
+    <string name="description">Açıklama</string>
+    <string name="category">Kategori</string>
+    <string name="type">Tür</string>
+    <string name="name">Ad</string>
+    <string name="phone">Telefon</string>
+    <string name="email">E-posta</string>
+    <string name="address">Adres</string>
+    <string name="tax_number">Vergi Numarası</string>
+    
+    <!-- Transaction Types -->
+    <string name="income">Gelir</string>
+    <string name="expense">Gider</string>
+    <string name="debt">Borç</string>
+    <string name="receivable">Alacak</string>
+    
+    <!-- Contact Types -->
+    <string name="customer">Müşteri</string>
+    <string name="supplier">Tedarikçi</string>
+    <string name="employee">Çalışan</string>
+    
+    <!-- Messages -->
+    <string name="no_data">Veri bulunamadı</string>
+    <string name="loading">Yükleniyor...</string>
+    <string name="error_occurred">Bir hata oluştu</string>
+    <string name="success">Başarılı</string>
+    <string name="confirm_delete">Silmek istediğinizden emin misiniz?</string>
+    
 </resources>

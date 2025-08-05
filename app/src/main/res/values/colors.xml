@@ -1,5 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- HesApp Renk Paleti -->
+    <!-- CDB4DB - Light Purple / Lavender -->
+    <color name="light_purple">#CDB4DB</color>
+    
+    <!-- FFC8DD - Light Pink -->
+    <color name="light_pink">#FFC8DD</color>
+    
+    <!-- FFAFCC - Medium Pink -->
+    <color name="medium_pink">#FFAFCC</color>
+    
+    <!-- BDE0FE - Light Blue -->
+    <color name="light_blue">#BDE0FE</color>
+    
+    <!-- A2D2FF - Medium Blue -->
+    <color name="medium_blue">#A2D2FF</color>
+    
+    <!-- Material Design 3 Renkleri -->
+    <color name="primary">@color/medium_blue</color>
+    <color name="primary_variant">@color/light_blue</color>
+    <color name="secondary">@color/light_purple</color>
+    <color name="secondary_variant">@color/medium_pink</color>
+    
+    <!-- Accent Renkleri -->
+    <color name="accent_pink">@color/light_pink</color>
+    <color name="accent_purple">@color/light_purple</color>
+    
+    <!-- Background Renkleri -->
+    <color name="background">#FFFFFF</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_variant">#F8F9FA</color>
+    
+    <!-- Text Renkleri -->
+    <color name="on_primary">#FFFFFF</color>
+    <color name="on_secondary">#FFFFFF</color>
+    <color name="on_background">#1C1B1F</color>
+    <color name="on_surface">#1C1B1F</color>
+    <color name="on_surface_variant">#49454F</color>
+    
+    <!-- Error Renkleri -->
+    <color name="error">#B3261E</color>
+    <color name="on_error">#FFFFFF</color>
+    
+    <!-- Success Renkleri -->
+    <color name="success">#4CAF50</color>
+    <color name="on_success">#FFFFFF</color>
+    
+    <!-- Warning Renkleri -->
+    <color name="warning">#FF9800</color>
+    <color name="on_warning">#FFFFFF</color>
+    
+    <!-- Info Renkleri -->
+    <color name="info">@color/medium_blue</color>
+    <color name="on_info">#FFFFFF</color>
+    
+    <!-- Gradient Renkleri -->
+    <color name="gradient_start_income">@color/success</color>
+    <color name="gradient_end_income">#66BB6A</color>
+    
+    <color name="gradient_start_expense">@color/error</color>
+    <color name="gradient_end_expense">#EF5350</color>
+    
+    <color name="gradient_start_net">@color/medium_blue</color>
+    <color name="gradient_end_net">@color/light_blue</color>
+    
+    <color name="gradient_start_debt">@color/warning</color>
+    <color name="gradient_end_debt">#FFB74D</color>
+    
+    <color name="gradient_start_receivable">@color/light_purple</color>
+    <color name="gradient_end_receivable">@color/medium_pink</color>
 </resources>

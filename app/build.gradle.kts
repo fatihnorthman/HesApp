@@ -3,6 +3,7 @@ plugins {
 	alias(libs.plugins.kotlin.android)
 	alias(libs.plugins.ksp)
 	alias(libs.plugins.navigation.safeargs.kotlin)
+	alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -64,6 +65,13 @@ dependencies {
 	// RecyclerView
 	implementation(libs.androidx.recyclerview)
 
+	// SwipeRefreshLayout
+	implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+	// Hilt
+	implementation(libs.hilt.android)
+	ksp(libs.hilt.compiler)
+	
 	// Test dependencies
 	testImplementation(libs.junit)
 	androidTestImplementation(libs.androidx.junit)
