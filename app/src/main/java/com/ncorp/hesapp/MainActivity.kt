@@ -8,6 +8,9 @@ import com.ncorp.hesapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.ui.setupWithNavController
+import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatDelegate
+import android.widget.ImageButton
 
 /**
  * Ana Aktivite Sınıfı
@@ -43,33 +46,18 @@ class MainActivity : AppCompatActivity() {
         // View binding'i başlat
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         
-        // Action bar'ı yapılandır
-        setupActionBar()
-        
+        // Tema tercihini uygula
+        applySavedTheme()
+
+        // Tema geçiş butonu
+        binding.toolbar.findViewById<ImageButton>(R.id.btnThemeToggle).setOnClickListener {
+            toggleTheme()
+        }
+
         // Navigation'ı yapılandır
         setupNavigation()
-    }
-    
-    /**
-     * Action bar'ı yapılandırır
-     * 
-     * Bu metod, action bar'ın görünümünü ve davranışını ayarlar.
-     * Uygulama temasına uygun olarak tasarlanmıştır.
-     */
-    private fun setupActionBar() {
-        // Action bar'ı etkinleştir
-        supportActionBar?.apply {
-            // Action bar başlığını ayarla
-            title = getString(R.string.app_name)
-            
-            // Geri butonunu etkinleştir
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
-            
-            // Action bar'ın görünümünü ayarla
-            elevation = 0f
-        }
     }
     
     /**
@@ -122,5 +110,20 @@ class MainActivity : AppCompatActivity() {
         
         // View binding'i temizle
         // binding = null // Kotlin'de otomatik olarak temizlenir
+    }
+
+    private fun toggleTheme() {
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        val isDark = prefs.getBoolean("dark_mode", false)
+        val newMode = if (isDark) AppCompatDelegate.MODE_NIGHT_NO else AppCompatDelegate.MODE_NIGHT_YES
+        AppCompatDelegate.setDefaultNightMode(newMode)
+        prefs.edit().putBoolean("dark_mode", !isDark).apply()
+    }
+
+    private fun applySavedTheme() {
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        val isDark = prefs.getBoolean("dark_mode", false)
+        val mode = if (isDark) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        AppCompatDelegate.setDefaultNightMode(mode)
     }
 }

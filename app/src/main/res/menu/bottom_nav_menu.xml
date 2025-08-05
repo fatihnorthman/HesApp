@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Dashboard - Ana Sayfa -->
+    <item
+        android:id="@+id/dashboardFragment"
+        android:icon="@drawable/ic_dashboard"
+        android:title="@string/dashboard" />
+
+    <!-- Transactions - İşlemler -->
+    <item
+        android:id="@+id/transactionsFragment"
+        android:icon="@drawable/ic_transactions"
+        android:title="@string/transactions" />
+
+    <!-- Contacts - Kişiler -->
+    <item
+        android:id="@+id/contactsFragment"
+        android:icon="@drawable/ic_contacts"
+        android:title="@string/contacts" />
+
+    <!-- Reports - Raporlar -->
+    <item
+        android:id="@+id/reportsFragment"
+        android:icon="@drawable/ic_reports"
+        android:title="@string/reports" />
+
+    <!-- Settings - Ayarlar -->
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings" />
+
+</menu> 

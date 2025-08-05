@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/dashboardFragment">
+
+    <!-- Dashboard Fragment - Ana sayfa -->
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.ncorp.hesapp.ui.fragment.DashboardFragment"
+        android:label="@string/dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <!-- Transactions Fragment - İşlemler -->
+    <fragment
+        android:id="@+id/transactionsFragment"
+        android:name="com.ncorp.hesapp.ui.fragment.TransactionsFragment"
+        android:label="@string/transactions"
+        tools:layout="@layout/fragment_transactions" />
+
+    <!-- Contacts Fragment - Kişiler -->
+    <fragment
+        android:id="@+id/contactsFragment"
+        android:name="com.ncorp.hesapp.ui.fragment.ContactsFragment"
+        android:label="@string/contacts"
+        tools:layout="@layout/fragment_contacts" />
+
+    <!-- Reports Fragment - Raporlar -->
+    <fragment
+        android:id="@+id/reportsFragment"
+        android:name="com.ncorp.hesapp.ui.fragment.ReportsFragment"
+        android:label="@string/reports"
+        tools:layout="@layout/fragment_reports" />
+
+    <!-- Settings Fragment - Ayarlar -->
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.ncorp.hesapp.ui.fragment.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" />
+
+</navigation> 
