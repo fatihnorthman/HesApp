@@ -49,4 +49,17 @@
     <string name="light_mode">Aydınlık Mod</string>
     <string name="dark_mode">Karanlık Mod</string>
     
+    <!-- Add Transaction -->
+    <string name="add_transaction">İşlem Ekle</string>
+    <string name="transaction_type">İşlem Türü</string>
+    <string name="transaction_details">İşlem Detayları</string>
+    <string name="contact_optional">Kişi (İsteğe Bağlı)</string>
+    <string name="notes_optional">Notlar (İsteğe Bağlı)</string>
+    <string name="save_transaction">İşlemi Kaydet</string>
+    <string name="select_date">Tarih Seç</string>
+    <string name="select_contact">Kişi Seç</string>
+    <string name="transaction_saved">İşlem başarıyla kaydedildi</string>
+    <string name="please_fill_required_fields">Lütfen gerekli alanları doldurun</string>
+    <string name="invalid_amount">Geçersiz tutar</string>
+    
 </resources>

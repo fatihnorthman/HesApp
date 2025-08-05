@@ -59,6 +59,14 @@
             app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left" />
+            
+        <action
+            android:id="@+id/action_transactions_to_addTransaction"
+            app:destination="@id/addTransactionFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <!-- Contacts Fragment - Kişiler -->
@@ -103,6 +111,22 @@
         <action
             android:id="@+id/action_settings_to_dashboard"
             app:destination="@id/dashboardFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
+
+    <!-- Add Transaction Fragment - İşlem Ekleme -->
+    <fragment
+        android:id="@+id/addTransactionFragment"
+        android:name="com.ncorp.hesapp.ui.fragment.AddTransactionFragment"
+        android:label="@string/add_transaction"
+        tools:layout="@layout/fragment_add_transaction">
+        
+        <action
+            android:id="@+id/action_addTransaction_to_transactions"
+            app:destination="@id/transactionsFragment"
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_right"

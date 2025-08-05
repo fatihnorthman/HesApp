@@ -39,33 +39,63 @@ HesApp, kişisel ve iş hesap takibi için geliştirilmiş modern bir Android uy
     <tr>
       <td align="center">
         <strong>Ana Sayfa (Dashboard)</strong><br/>
-        <img src="https://via.placeholder.com/300x600/4CAF50/FFFFFF?text=Dashboard" width="150"/>
+        <img src="docs/screenshots/dashboard.png" width="150" alt="Dashboard"/>
       </td>
       <td align="center">
         <strong>İşlemler</strong><br/>
-        <img src="https://via.placeholder.com/300x600/2196F3/FFFFFF?text=Transactions" width="150"/>
+        <img src="docs/screenshots/transactions.png" width="150" alt="Transactions"/>
       </td>
       <td align="center">
         <strong>Kişiler</strong><br/>
-        <img src="https://via.placeholder.com/300x600/FF9800/FFFFFF?text=Contacts" width="150"/>
+        <img src="docs/screenshots/contacts.png" width="150" alt="Contacts"/>
       </td>
     </tr>
     <tr>
       <td align="center">
-        <strong>Raporlar</strong><br/>
-        <img src="https://via.placeholder.com/300x600/9C27B0/FFFFFF?text=Reports" width="150"/>
+        <strong>İşlem Ekleme</strong><br/>
+        <img src="docs/screenshots/add-transaction.png" width="150" alt="Add Transaction"/>
       </td>
       <td align="center">
-        <strong>Ayarlar</strong><br/>
-        <img src="https://via.placeholder.com/300x600/607D8B/FFFFFF?text=Settings" width="150"/>
+        <strong>Karanlık Tema</strong><br/>
+        <img src="docs/screenshots/dashboard.png" width="150" alt="Dark Theme"/>
       </td>
       <td align="center">
-        <strong>Tema Geçişi</strong><br/>
-        <img src="https://via.placeholder.com/300x600/3B82F6/FFFFFF?text=Theme+Toggle" width="150"/>
+        <strong>Modern UI</strong><br/>
+        <img src="docs/screenshots/transactions.png" width="150" alt="Modern UI"/>
       </td>
     </tr>
   </table>
 </div>
+
+### 📱 **Ana Sayfa (Dashboard)**
+- **Finansal Özet Kartları** - Gelir, gider, borç, alacak toplamları
+- **İstatistik Kartları** - Toplam işlem ve kişi sayıları
+- **Hızlı İşlemler** - Kolay erişim butonları
+- **Modern Tasarım** - Material Design 3 ile şık arayüz
+
+### 💰 **İşlemler Sayfası**
+- **Arama ve Filtreleme** - Gelişmiş arama ve chip filtreleri
+- **İşlem Listesi** - Performanslı RecyclerView
+- **Floating Action Button** - Yeni işlem ekleme
+- **Swipe Refresh** - Yenileme özelliği
+
+### 👥 **Kişiler Sayfası**
+- **Kişi Yönetimi** - Müşteri, tedarikçi, çalışan kategorileri
+- **Filtreleme Sistemi** - Kişi türüne göre filtreleme
+- **Arama Fonksiyonu** - Hızlı kişi arama
+- **Modern Chip Tasarımı** - Görsel filtreleme
+
+### ➕ **İşlem Ekleme Sayfası**
+- **İşlem Türü Seçimi** - Chip group ile görsel seçim
+- **Form Validasyonu** - Kapsamlı veri kontrolü
+- **Tarih Seçici** - Native DatePickerDialog
+- **Dinamik Form** - İşlem türüne göre alan görünürlüğü
+
+### 🌙 **Karanlık Tema**
+- **Göz Dostu Tasarım** - Koyu arka plan ve açık metinler
+- **Renk Uyumu** - Tutarlı renk paleti
+- **Modern İkonlar** - Material Design ikonları
+- **Responsive Layout** - Tüm cihazlarda uyumlu
 
 ## 🛠️ Teknolojiler
 

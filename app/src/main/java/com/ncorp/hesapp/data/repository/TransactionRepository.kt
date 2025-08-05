@@ -68,6 +68,13 @@ class TransactionRepository @Inject constructor(
     }
 
     /**
+     * İşlem ekle (addTransaction alias)
+     */
+    suspend fun addTransaction(transaction: Transaction): Long {
+        return insertTransaction(transaction)
+    }
+
+    /**
      * İşlem güncelle
      */
     suspend fun updateTransaction(transaction: Transaction) {

@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
+import com.ncorp.hesapp.R
 import com.ncorp.hesapp.data.model.TransactionType
 import com.ncorp.hesapp.databinding.FragmentTransactionsBinding
 import com.ncorp.hesapp.ui.adapter.TransactionAdapter
@@ -143,8 +145,7 @@ class TransactionsFragment : Fragment() {
 
     private fun setupFloatingActionButton() {
         binding.fabAddTransaction.setOnClickListener {
-            // TODO: İşlem ekleme sayfasına yönlendir
-            showSnackbar("Yeni işlem ekleme sayfası açılacak")
+            findNavController().navigate(R.id.action_transactions_to_addTransaction)
         }
     }
 
