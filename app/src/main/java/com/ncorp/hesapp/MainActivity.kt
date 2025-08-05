@@ -11,6 +11,9 @@ import androidx.navigation.ui.setupWithNavController
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import android.widget.ImageButton
+import androidx.navigation.NavOptions
+import com.google.android.material.card.MaterialCardView
+import android.view.animation.AnimationUtils
 
 /**
  * Ana Aktivite Sınıfı
@@ -24,6 +27,8 @@ import android.widget.ImageButton
  * - Dependency injection desteği
  * - Action bar yapılandırması
  * - Fragment yönetimi
+ * - Gelişmiş animasyon desteği
+ * - Geliştirilmiş tema geçiş butonu
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -51,8 +56,13 @@ class MainActivity : AppCompatActivity() {
         // Tema tercihini uygula
         applySavedTheme()
 
-        // Tema geçiş butonu
-        binding.toolbar.findViewById<ImageButton>(R.id.btnThemeToggle).setOnClickListener {
+        // Geliştirilmiş tema geçiş butonu
+        binding.btnThemeToggle.setOnClickListener {
+            // Buton animasyonu
+            val scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.button_scale)
+            binding.btnThemeToggle.startAnimation(scaleAnimation)
+            
+            // Tema geçişi
             toggleTheme()
         }
 
@@ -65,6 +75,7 @@ class MainActivity : AppCompatActivity() {
      * 
      * Bu metod, navigation component'i başlatır ve fragment geçişlerini
      * yönetir. Safe args kullanarak tip güvenli navigation sağlar.
+     * Gelişmiş animasyon desteği ile kullanıcı deneyimini iyileştirir.
      */
     private fun setupNavigation() {
         // NavHostFragment'i bul
@@ -84,6 +95,32 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             // Fragment değiştiğinde action bar başlığını güncelle
             supportActionBar?.title = destination.label ?: getString(R.string.app_name)
+        }
+        
+        // Bottom navigation item seçim animasyonlarını iyileştir
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            val currentDestination = navController.currentDestination?.id
+            val targetDestination = when (item.itemId) {
+                R.id.dashboardFragment -> R.id.dashboardFragment
+                R.id.transactionsFragment -> R.id.transactionsFragment
+                R.id.contactsFragment -> R.id.contactsFragment
+                R.id.reportsFragment -> R.id.reportsFragment
+                R.id.settingsFragment -> R.id.settingsFragment
+                else -> null
+            }
+            
+            if (targetDestination != null && targetDestination != currentDestination) {
+                // Özel animasyon seçenekleri ile navigation
+                val navOptions = NavOptions.Builder()
+                    .setEnterAnim(R.anim.slide_in_right)
+                    .setExitAnim(R.anim.slide_out_left)
+                    .setPopEnterAnim(R.anim.slide_in_left)
+                    .setPopExitAnim(R.anim.slide_out_right)
+                    .build()
+                
+                navController.navigate(targetDestination, null, navOptions)
+            }
+            true
         }
     }
     
@@ -112,6 +149,12 @@ class MainActivity : AppCompatActivity() {
         // binding = null // Kotlin'de otomatik olarak temizlenir
     }
 
+    /**
+     * Tema geçişini gerçekleştirir
+     * 
+     * Bu metod, kullanıcı tema geçiş butonuna bastığında çağrılır.
+     * Aydınlık ve karanlık tema arasında geçiş yapar ve tercihi kaydeder.
+     */
     private fun toggleTheme() {
         val prefs = getSharedPreferences("settings", MODE_PRIVATE)
         val isDark = prefs.getBoolean("dark_mode", false)
@@ -120,6 +163,12 @@ class MainActivity : AppCompatActivity() {
         prefs.edit().putBoolean("dark_mode", !isDark).apply()
     }
 
+    /**
+     * Kaydedilmiş tema tercihini uygular
+     * 
+     * Bu metod, uygulama başlatıldığında kullanıcının önceki tema tercihini
+     * yükler ve uygular.
+     */
     private fun applySavedTheme() {
         val prefs = getSharedPreferences("settings", MODE_PRIVATE)
         val isDark = prefs.getBoolean("dark_mode", false)

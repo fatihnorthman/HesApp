@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Light Theme Colors -->
-    <color name="african_violet">#B590CA</color>
-    <color name="tickle_me_pink">#FF8CB8</color>
-    <color name="cyclamen">#FF76A8</color>
-    <color name="maya_blue">#85C5FD</color>
-    <color name="argentinian_blue">#6DB8FF</color>
+    <!-- Light Theme Colors - Daha belirgin renkler -->
+    <color name="african_violet">#8B5CF6</color>
+    <color name="tickle_me_pink">#EC4899</color>
+    <color name="cyclamen">#F43F5E</color>
+    <color name="maya_blue">#3B82F6</color>
+    <color name="argentinian_blue">#1D4ED8</color>
 
     <!-- Material color roles -->
     <color name="primary">@color/maya_blue</color>
     <color name="primary_variant">@color/argentinian_blue</color>
     <color name="secondary">@color/african_violet</color>
     <color name="secondary_variant">@color/tickle_me_pink</color>
-    <color name="background">@color/argentinian_blue</color>
-    <color name="surface">@color/maya_blue</color>
-    <color name="surface_variant">@color/african_violet</color>
+    <color name="background">#FFFFFF</color>
+    <color name="surface">#F8FAFC</color>
+    <color name="surface_variant">#F1F5F9</color>
     <color name="on_primary">#FFFFFF</color>
     <color name="on_secondary">#FFFFFF</color>
-    <color name="on_background">#1C1B1F</color>
-    <color name="on_surface">#1C1B1F</color>
-    <color name="on_surface_variant">#49454F</color>
-    <color name="error">#B3261E</color>
+    <color name="on_background">#0F172A</color>
+    <color name="on_surface">#1E293B</color>
+    <color name="on_surface_variant">#475569</color>
+    <color name="error">#DC2626</color>
     <color name="on_error">#FFFFFF</color>
 </resources>
