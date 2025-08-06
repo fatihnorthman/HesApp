@@ -1,9 +1,15 @@
 package com.ncorp.hesapp.data.repository
 
 import com.ncorp.hesapp.data.dao.TransactionDao
+import com.ncorp.hesapp.data.dao.FinancialSummary
 import com.ncorp.hesapp.data.model.Transaction
 import com.ncorp.hesapp.data.model.TransactionType
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,12 +30,42 @@ import javax.inject.Singleton
 class TransactionRepository @Inject constructor(
     private val transactionDao: TransactionDao
 ) {
+    // Shared scope for caching flows
+    private val repositoryScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+
+    // Cached flows for better performance
+    private val _allTransactions = transactionDao.getAllTransactions()
+        .shareIn(repositoryScope, kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(5000), 1)
+    
+    private val _financialSummary = transactionDao.getFinancialSummary()
+        .shareIn(repositoryScope, kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(5000), 1)
 
     /**
-     * Tüm işlemleri getir
+     * Tüm işlemleri getir (cached)
      */
     fun getAllTransactions(): Flow<List<Transaction>> {
-        return transactionDao.getAllTransactions()
+        return _allTransactions
+    }
+
+    /**
+     * Finansal özet getir (optimized single query)
+     */
+    fun getFinancialSummary(): Flow<FinancialSummary> {
+        return _financialSummary
+    }
+
+    /**
+     * Sayfalı işlemler getir (pagination için)
+     */
+    suspend fun getTransactionsPaged(limit: Int, offset: Int): List<Transaction> {
+        return transactionDao.getTransactionsPaged(limit, offset)
+    }
+
+    /**
+     * En son N işlemi getir (dashboard için optimize edilmiş)
+     */
+    fun getLatestTransactions(limit: Int = 10): Flow<List<Transaction>> {
+        return transactionDao.getLatestTransactions(limit)
     }
 
     /**
@@ -152,7 +188,14 @@ class TransactionRepository @Inject constructor(
     }
 
     /**
-     * Örnek veriler ekle (test için)
+     * Toplu işlem ekleme (batch insert for better performance)
+     */
+    suspend fun insertTransactions(transactions: List<Transaction>): List<Long> {
+        return transactionDao.insertTransactions(transactions)
+    }
+
+    /**
+     * Örnek veriler ekle (test için) - optimized batch insert
      */
     suspend fun insertSampleData() {
         val sampleTransactions = listOf(
@@ -186,8 +229,7 @@ class TransactionRepository @Inject constructor(
             )
         )
 
-        sampleTransactions.forEach { transaction ->
-            transactionDao.insertTransaction(transaction)
-        }
+        // Use batch insert for better performance
+        transactionDao.insertTransactions(sampleTransactions)
     }
 } 

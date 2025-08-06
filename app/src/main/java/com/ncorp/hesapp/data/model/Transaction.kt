@@ -2,6 +2,7 @@ package com.ncorp.hesapp.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Index
 import java.util.Date
 
 /**
@@ -20,7 +21,16 @@ import java.util.Date
  * - İlişkili kişi ID'si
  * - Notlar
  */
-@Entity(tableName = "transactions")
+@Entity(
+    tableName = "transactions",
+    indices = [
+        Index(value = ["type"]),
+        Index(value = ["date"]),
+        Index(value = ["category"]),
+        Index(value = ["contactId"]),
+        Index(value = ["type", "date"])  // Composite index for common queries
+    ]
+)
 data class Transaction(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,

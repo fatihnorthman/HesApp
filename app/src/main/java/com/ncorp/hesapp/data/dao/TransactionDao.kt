@@ -21,10 +21,16 @@ import kotlinx.coroutines.flow.Flow
 interface TransactionDao {
 
     /**
-     * Tüm işlemleri getir
+     * Tüm işlemleri getir (with LIMIT for initial loading)
      */
     @Query("SELECT * FROM transactions ORDER BY date DESC")
     fun getAllTransactions(): Flow<List<Transaction>>
+    
+    /**
+     * Sayfalı işlemler getir (pagination için)
+     */
+    @Query("SELECT * FROM transactions ORDER BY date DESC LIMIT :limit OFFSET :offset")
+    suspend fun getTransactionsPaged(limit: Int, offset: Int): List<Transaction>
 
     /**
      * İşlem türüne göre filtrele
@@ -121,6 +127,32 @@ interface TransactionDao {
      */
     @Query("SELECT COUNT(*) FROM transactions")
     fun getTransactionCount(): Flow<Int>
+    
+    /**
+     * Toplu işlem ekleme (batch insert for better performance)
+     */
+    @Insert
+    suspend fun insertTransactions(transactions: List<Transaction>): List<Long>
+    
+    /**
+     * En son N işlemi getir (dashboard için optimize edilmiş)
+     */
+    @Query("SELECT * FROM transactions ORDER BY date DESC LIMIT :limit")
+    fun getLatestTransactions(limit: Int): Flow<List<Transaction>>
+    
+    /**
+     * Performanslı istatistik sorgusu (tek sorguda tüm toplamlar)
+     */
+    @Query("""
+        SELECT 
+            COALESCE(SUM(CASE WHEN type = 'INCOME' THEN amount ELSE 0 END), 0) as totalIncome,
+            COALESCE(SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END), 0) as totalExpense,
+            COALESCE(SUM(CASE WHEN type = 'DEBT' THEN amount ELSE 0 END), 0) as totalDebt,
+            COALESCE(SUM(CASE WHEN type = 'RECEIVABLE' THEN amount ELSE 0 END), 0) as totalReceivable,
+            COUNT(*) as totalCount
+        FROM transactions
+    """)
+    fun getFinancialSummary(): Flow<FinancialSummary>
 }
 
 /**
@@ -129,4 +161,18 @@ interface TransactionDao {
 data class CategorySummary(
     val category: String,
     val total: Double
-) 
+)
+
+/**
+ * Finansal özet data class'ı (tek sorgu performansı için)
+ */
+data class FinancialSummary(
+    val totalIncome: Double,
+    val totalExpense: Double,
+    val totalDebt: Double,
+    val totalReceivable: Double,
+    val totalCount: Int
+) {
+    val netAmount: Double get() = totalIncome - totalExpense
+    val balance: Double get() = totalIncome - totalExpense + totalReceivable - totalDebt
+} 

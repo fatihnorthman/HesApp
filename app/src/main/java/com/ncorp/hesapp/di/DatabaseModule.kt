@@ -26,12 +26,21 @@ import javax.inject.Singleton
 object DatabaseModule {
 
     /**
-     * AppDatabase instance'ı sağla
+     * AppDatabase instance'ı sağla (Memory optimized)
      */
     @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
         return AppDatabase.getDatabase(context)
+    }
+    
+    /**
+     * Database executor for background operations
+     */
+    @Provides
+    @Singleton
+    fun provideDatabaseExecutor(): java.util.concurrent.Executor {
+        return java.util.concurrent.Executors.newFixedThreadPool(4)
     }
 
     /**

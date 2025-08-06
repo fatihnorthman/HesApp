@@ -24,11 +24,20 @@ android {
 	}
 	buildTypes {
 		release {
-			isMinifyEnabled = false
+			isMinifyEnabled = true
+			isShrinkResources = true
+			isDebuggable = false
 			proguardFiles(
 				getDefaultProguardFile("proguard-android-optimize.txt"),
 				"proguard-rules.pro"
 			)
+		}
+		debug {
+			isMinifyEnabled = false
+			isShrinkResources = false
+			isDebuggable = true
+			applicationIdSuffix = ".debug"
+			versionNameSuffix = "-debug"
 		}
 	}
 	compileOptions {
@@ -37,6 +46,23 @@ android {
 	}
 	kotlinOptions {
 		jvmTarget = "11"
+		freeCompilerArgs += listOf(
+			"-opt-in=kotlin.RequiresOptIn",
+			"-Xjvm-default=all"
+		)
+	}
+	
+	// Performance optimizations
+	compileOptions {
+		isCoreLibraryDesugaringEnabled = true
+	}
+	
+	// Packaging options
+	packagingOptions {
+		resources {
+			excludes += "/META-INF/{AL2.0,LGPL2.1}"
+			excludes += "META-INF/gradle/incremental.annotation.processors"
+		}
 	}
 }
 
@@ -71,6 +97,12 @@ dependencies {
 	// Hilt
 	implementation(libs.hilt.android)
 	ksp(libs.hilt.compiler)
+	
+	// Performance monitoring
+	implementation("androidx.profileinstaller:profileinstaller:1.3.1")
+	
+	// Core library desugaring
+	coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 	
 	// Test dependencies
 	testImplementation(libs.junit)

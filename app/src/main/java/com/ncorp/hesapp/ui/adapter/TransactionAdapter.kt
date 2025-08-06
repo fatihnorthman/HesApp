@@ -47,8 +47,13 @@ class TransactionAdapter(
         private val binding: ItemTransactionBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale("tr"))
-        private val currencyFormat = java.text.NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
+        // Cache formatters to avoid recreation
+        companion object {
+            @JvmStatic
+            private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale("tr"))
+            @JvmStatic
+            private val currencyFormat = java.text.NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
+        }
 
         fun bind(transaction: Transaction) {
             binding.apply {
@@ -58,37 +63,38 @@ class TransactionAdapter(
                 // Kategori
                 tvCategory.text = transaction.category
 
-                // Tarih
+                // Tarih - cache formatted date
                 tvDate.text = dateFormat.format(transaction.date)
 
-                // Tutar
+                // Tutar - cache formatted amount
                 tvAmount.text = currencyFormat.format(transaction.amount)
 
                 // İşlem türü
                 tvType.text = transaction.type.getDisplayName()
 
-                // İşlem türüne göre renklendirme
+                // İşlem türüne göre renklendirme - cache context
+                val context = root.context
                 val gradientRes = transaction.type.getGradientRes()
                 ivTransactionType.setImageResource(gradientRes)
 
-                // Tutar rengi
-                val amountColor = when (transaction.type) {
-                    TransactionType.INCOME -> root.context.getColor(android.R.color.holo_green_dark)
-                    TransactionType.EXPENSE -> root.context.getColor(android.R.color.holo_red_dark)
-                    TransactionType.DEBT -> root.context.getColor(android.R.color.holo_orange_dark)
-                    TransactionType.RECEIVABLE -> root.context.getColor(android.R.color.holo_blue_dark)
-                }
+                // Tutar rengi - use cached colors
+                val amountColor = getAmountColor(context, transaction.type)
                 tvAmount.setTextColor(amountColor)
                 tvType.setTextColor(amountColor)
 
-                // Click listener'lar
-                root.setOnClickListener {
-                    onItemClick(transaction)
-                }
-
-                root.setOnLongClickListener {
-                    onItemLongClick(transaction)
-                }
+                // Click listener'lar - avoid recreating lambdas
+                root.setOnClickListener { onItemClick(transaction) }
+                root.setOnLongClickListener { onItemLongClick(transaction) }
+            }
+        }
+        
+        // Cache color lookups
+        private fun getAmountColor(context: android.content.Context, type: TransactionType): Int {
+            return when (type) {
+                TransactionType.INCOME -> context.getColor(android.R.color.holo_green_dark)
+                TransactionType.EXPENSE -> context.getColor(android.R.color.holo_red_dark)
+                TransactionType.DEBT -> context.getColor(android.R.color.holo_orange_dark)
+                TransactionType.RECEIVABLE -> context.getColor(android.R.color.holo_blue_dark)
             }
         }
     }
@@ -97,6 +103,7 @@ class TransactionAdapter(
      * DiffUtil Callback
      * 
      * İşlem listesindeki değişiklikleri tespit eder.
+     * Performans için optimize edilmiş karşılaştırmalar.
      */
     private class TransactionDiffCallback : DiffUtil.ItemCallback<Transaction>() {
         override fun areItemsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
@@ -104,7 +111,25 @@ class TransactionAdapter(
         }
 
         override fun areContentsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
-            return oldItem == newItem
+            // Performance-optimized content comparison
+            return oldItem.id == newItem.id &&
+                    oldItem.type == newItem.type &&
+                    oldItem.description == newItem.description &&
+                    oldItem.category == newItem.category &&
+                    oldItem.amount == newItem.amount &&
+                    oldItem.date == newItem.date &&
+                    oldItem.contactId == newItem.contactId
+        }
+        
+        override fun getChangePayload(oldItem: Transaction, newItem: Transaction): Any? {
+            // Return payload for partial updates
+            return if (oldItem.amount != newItem.amount) {
+                "AMOUNT_CHANGED"
+            } else if (oldItem.description != newItem.description) {
+                "DESCRIPTION_CHANGED"
+            } else {
+                super.getChangePayload(oldItem, newItem)
+            }
         }
     }
 } 

@@ -5,17 +5,41 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Keep line numbers for debugging
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Room database rules
+-keep class * extends androidx.room.RoomDatabase
+-keep @androidx.room.Entity class *
+-dontwarn androidx.room.paging.**
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Hilt rules
+-keep class dagger.hilt.** { *; }
+-keep class javax.inject.** { *; }
+-keep class * extends dagger.hilt.android.HiltAndroidApp
+
+# Keep ViewModel and LiveData classes
+-keep class * extends androidx.lifecycle.ViewModel
+-keep class * extends androidx.lifecycle.AndroidViewModel
+
+# Keep model classes (data classes)
+-keep class com.ncorp.hesapp.data.model.** { *; }
+
+# Navigation Component
+-keep class androidx.navigation.fragment.NavHostFragment
+
+# Kotlin Coroutines
+-dontwarn kotlinx.coroutines.flow.**
+
+# Performance optimizations
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** i(...);
+}
+
+# Remove debug code in release
+-assumenosideeffects class kotlin.jvm.internal.Intrinsics {
+    static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
+}

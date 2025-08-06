@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.ncorp.hesapp.databinding.ActivityMainBinding
+import com.ncorp.hesapp.utils.PerformanceMonitor
 import dagger.hilt.android.AndroidEntryPoint
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.navigation.ui.setupWithNavController
@@ -48,25 +49,27 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // View binding'i başlat
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
-        
-        // Tema tercihini uygula
-        applySavedTheme()
-
-        // Geliştirilmiş tema geçiş butonu
-        binding.btnThemeToggle.setOnClickListener {
-            // Buton animasyonu
-            val scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.button_scale)
-            binding.btnThemeToggle.startAnimation(scaleAnimation)
+        // Performance monitoring başlat
+        PerformanceMonitor.measureExecutionTime("MainActivity.onCreate") {
+            // View binding'i başlat
+            binding = ActivityMainBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+            setSupportActionBar(binding.toolbar)
             
-            // Tema geçişi
-            toggleTheme()
-        }
+            // Tema tercihini uygula
+            applySavedTheme()
 
-        // Navigation'ı yapılandır
+            // Geliştirilmiş tema geçiş butonu
+            binding.btnThemeToggle.setOnClickListener {
+                // Buton animasyonu
+                val scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.button_scale)
+                binding.btnThemeToggle.startAnimation(scaleAnimation)
+                
+                // Tema geçişi
+                toggleTheme()
+            }
+
+            // Navigation'ı yapılandır
         setupNavigation()
     }
     

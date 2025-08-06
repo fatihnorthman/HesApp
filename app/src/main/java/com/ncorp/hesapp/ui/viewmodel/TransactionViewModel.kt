@@ -66,26 +66,30 @@ class TransactionViewModel @Inject constructor(
     }
 
     /**
-     * Filtreleme kurulumu
+     * Filtreleme kurulumu (Performance optimized)
      */
     private fun setupFiltering() {
         viewModelScope.launch {
             combine(
                 _transactions,
                 _selectedFilter,
-                _searchQuery
+                _searchQuery.debounce(300) // Debounce search to reduce filtering frequency
             ) { transactions, filter, query ->
+                // Early return for empty list
+                if (transactions.isEmpty()) return@combine emptyList<Transaction>()
+                
                 var filteredTransactions = transactions
 
-                // Arama filtresi
-                if (query.isNotEmpty()) {
+                // Apply filters efficiently
+                if (query.isNotBlank()) {
+                    val lowercaseQuery = query.lowercase()
                     filteredTransactions = filteredTransactions.filter { transaction ->
-                        transaction.description.contains(query, ignoreCase = true) ||
-                        transaction.category.contains(query, ignoreCase = true)
+                        transaction.description.lowercase().contains(lowercaseQuery) ||
+                        transaction.category.lowercase().contains(lowercaseQuery)
                     }
                 }
 
-                // Tür filtresi
+                // Type filter
                 filter?.let { type ->
                     filteredTransactions = filteredTransactions.filter { transaction ->
                         transaction.type == type
@@ -93,7 +97,9 @@ class TransactionViewModel @Inject constructor(
                 }
 
                 filteredTransactions
-            }.collect { filteredTransactions ->
+            }
+            .distinctUntilChanged() // Avoid unnecessary updates
+            .collect { filteredTransactions ->
                 _uiState.value = _uiState.value.copy(
                     transactions = filteredTransactions,
                     isEmpty = filteredTransactions.isEmpty()
