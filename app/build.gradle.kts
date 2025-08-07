@@ -103,6 +103,7 @@ dependencies {
 	
 	// Core library desugaring
 	coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+	implementation("com.google.guava:guava:32.1.2-android")
 	
 	// Test dependencies
 	testImplementation(libs.junit)

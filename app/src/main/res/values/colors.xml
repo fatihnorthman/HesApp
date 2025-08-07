@@ -1,25 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Light Theme Colors - Daha belirgin renkler -->
-    <color name="african_violet">#8B5CF6</color>
-    <color name="tickle_me_pink">#EC4899</color>
-    <color name="cyclamen">#F43F5E</color>
-    <color name="maya_blue">#3B82F6</color>
-    <color name="argentinian_blue">#1D4ED8</color>
-
-    <!-- Material color roles -->
-    <color name="primary">@color/maya_blue</color>
-    <color name="primary_variant">@color/argentinian_blue</color>
-    <color name="secondary">@color/african_violet</color>
-    <color name="secondary_variant">@color/tickle_me_pink</color>
-    <color name="background">#FFFFFF</color>
-    <color name="surface">#F8FAFC</color>
-    <color name="surface_variant">#F1F5F9</color>
+    <!-- Uygulamanın ana renk paleti -->
+    <color name="primary">#f43f51</color> <!-- Canlı kırmızı -->
+    <color name="primary_variant">#d47f8b</color> <!-- Açık kırmızı/pembe -->
+    <color name="secondary">#0e323d</color> <!-- Koyu mavi/yeşil -->
+    <color name="secondary_variant">#738179</color> <!-- Gri-yeşil -->
+    <color name="background">#e3c5a5</color> <!-- Açık bej -->
+    <color name="surface">#fffaf7</color> <!-- Çok açık bej (background'un biraz açığı) -->
+    <color name="surface_variant">#f5e7d7</color> <!-- Açık bej varyantı -->
     <color name="on_primary">#FFFFFF</color>
     <color name="on_secondary">#FFFFFF</color>
-    <color name="on_background">#0F172A</color>
-    <color name="on_surface">#1E293B</color>
-    <color name="on_surface_variant">#475569</color>
-    <color name="error">#DC2626</color>
+    <color name="on_background">#0e323d</color>
+    <color name="on_surface">#0e323d</color>
+    <color name="on_surface_variant">#738179</color>
+    <color name="error">#f43f51</color>
     <color name="on_error">#FFFFFF</color>
 </resources>

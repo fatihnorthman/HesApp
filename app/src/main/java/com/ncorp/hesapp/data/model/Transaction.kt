@@ -1,3 +1,18 @@
+/*
+ * Transaction.kt
+ *
+ * Bu dosya, işlemlerle ilgili veri modelini (Entity) ve yardımcı tipleri içerir.
+ * Entity, Room veritabanında bir tabloyu temsil eden veri sınıfıdır.
+ * Enum, işlemin türünü (gelir, gider, borç, alacak) belirtir.
+ * Extension fonksiyonlar, enum'a ek işlevler kazandırır.
+ *
+ * Temel görevleri:
+ * - İşlemleri (Transaction) veri tablosu olarak modellemek
+ * - İşlem türlerini (TransactionType) tanımlamak
+ * - Enum'a yardımcı fonksiyonlar eklemek (görsel, isim, renk vs.)
+ *
+ * Kodun her adımı, "neden böyle yapıldı?" ve "ne işe yarar?" sorularına cevap verecek şekilde açıklanmıştır.
+ */
 package com.ncorp.hesapp.data.model
 
 import androidx.room.Entity

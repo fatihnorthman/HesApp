@@ -2,18 +2,24 @@ package com.ncorp.hesapp
 
 import android.app.Application
 import android.os.StrictMode
-import androidx.profileinstaller.ProfileInstaller
+
 import com.ncorp.hesapp.utils.PerformanceMonitor
 import dagger.hilt.android.HiltAndroidApp
 
-/**
- * HesApp Application Class
- * 
- * Bu sınıf, Hilt dependency injection için gerekli olan Application sınıfıdır.
- * Tüm uygulama genelinde dependency injection'ı yönetir.
- * 
- * @HiltAndroidApp annotation'ı, Hilt'in bu sınıfı Application sınıfı olarak
- * kullanmasını sağlar ve dependency injection container'ını başlatır.
+/*
+ * HesAppApplication.kt
+ *
+ * Bu dosya, uygulamanın Application sınıfını içerir.
+ * Android'de Application sınıfı, uygulama başlatıldığında ilk çalışan ve uygulama boyunca yaşayan ana sınıftır.
+ * Burada, uygulama genelinde kullanılacak bağımlılıkların (örneğin veritabanı, repository, servisler) yönetimi yapılır.
+ *
+ * Kullanılan teknolojiler:
+ * - Dagger Hilt: Bağımlılık enjeksiyonu için kullanılır. @HiltAndroidApp ile işaretlenen bu sınıf, Hilt'in uygulama genelinde çalışmasını sağlar.
+ * - PerformanceMonitor: Uygulamanın performansını ve bellek kullanımını izlemek için kullanılır.
+ * - StrictMode: Geliştirme aşamasında hatalı veya yavaş kodları tespit etmek için kullanılır.
+ *
+ * Bu dosyada, her fonksiyonun ve önemli kod bloğunun üstünde detaylı açıklamalar bulacaksınız.
+ * Kodun her adımı, "neden böyle yapıldı?" ve "ne işe yarar?" sorularına cevap verecek şekilde açıklanmıştır.
  */
 @HiltAndroidApp
 class HesAppApplication : Application() {
@@ -25,12 +31,10 @@ class HesAppApplication : Application() {
         PerformanceMonitor.markAppStart()
         
         // Debug modunda StrictMode aktif et
-        if (BuildConfig.DEBUG) {
-            enableStrictMode()
-        }
+        enableStrictMode()
         
         // Profile guided optimization başlat
-        ProfileInstaller.writeProfile(this)
+        // ProfileInstaller.writeProfile(this) // Kaldırıldı, otomatik çalışır
         
         // Memory optimization
         PerformanceMonitor.logMemoryUsage("Application.onCreate")
@@ -42,26 +46,24 @@ class HesAppApplication : Application() {
      * StrictMode'u aktif eder (debug build'ler için)
      */
     private fun enableStrictMode() {
-        if (BuildConfig.DEBUG) {
-            StrictMode.setThreadPolicy(
-                StrictMode.ThreadPolicy.Builder()
-                    .detectDiskReads()
-                    .detectDiskWrites()
-                    .detectNetwork()
-                    .detectCustomSlowCalls()
-                    .penaltyLog()
-                    .build()
-            )
-            
-            StrictMode.setVmPolicy(
-                StrictMode.VmPolicy.Builder()
-                    .detectLeakedSqlLiteObjects()
-                    .detectLeakedClosableObjects()
-                    .detectActivityLeaks()
-                    .detectLeakedRegistrationObjects()
-                    .penaltyLog()
-                    .build()
-            )
-        }
+        StrictMode.setThreadPolicy(
+            StrictMode.ThreadPolicy.Builder()
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()
+                .detectCustomSlowCalls()
+                .penaltyLog()
+                .build()
+        )
+        
+        StrictMode.setVmPolicy(
+            StrictMode.VmPolicy.Builder()
+                .detectLeakedSqlLiteObjects()
+                .detectLeakedClosableObjects()
+                .detectActivityLeaks()
+                .detectLeakedRegistrationObjects()
+                .penaltyLog()
+                .build()
+        )
     }
 } 

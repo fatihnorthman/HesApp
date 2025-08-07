@@ -9,18 +9,20 @@ import com.ncorp.hesapp.databinding.FragmentDashboardBinding
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
-/**
- * Dashboard Fragment
- * 
- * Bu fragment, uygulamanın ana sayfasıdır ve genel istatistikleri gösterir.
- * MVVM mimarisine uygun olarak tasarlanmıştır.
- * 
- * Özellikler:
- * - Toplam gelir/gider özeti
- * - Borç/alacak durumu
- * - Son işlemler listesi
- * - Hızlı işlem butonları
- * - Gerçek zamanlı veri güncellemesi
+/*
+ * DashboardFragment.kt
+ *
+ * Bu dosya, uygulamanın ana ekranı olan Dashboard ekranını yönetir.
+ * Fragment, Android'de bir ekranın veya ekran parçasının mantığını ve arayüzünü yöneten yapılardır.
+ * Dashboard ekranı, kullanıcının finansal özetini, hızlı aksiyon butonlarını ve son işlemleri gösterir.
+ *
+ * Kullanılan teknolojiler:
+ * - MVVM mimarisi: Kodun okunabilirliğini ve sürdürülebilirliğini artırır.
+ * - View Binding: XML arayüz dosyalarına güvenli erişim sağlar.
+ * - Hilt: Bağımlılık enjeksiyonu ile modüler ve test edilebilir kod yazmayı sağlar.
+ * - SwipeRefreshLayout: Kullanıcının ekranı aşağı çekerek verileri yenilemesini sağlar.
+ *
+ * Kodun her adımı, "neden böyle yapıldı?" ve "ne işe yarar?" sorularına cevap verecek şekilde açıklanmıştır.
  */
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {

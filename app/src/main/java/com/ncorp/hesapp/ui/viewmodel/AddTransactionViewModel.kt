@@ -1,3 +1,17 @@
+/*
+ * AddTransactionViewModel.kt
+ *
+ * Bu dosya, yeni bir finansal işlem ekleme ekranı için ViewModel sınıfını içerir.
+ * ViewModel, MVVM mimarisinde UI ile veri katmanı arasında köprü görevi görür ve ekranın durumunu yönetir.
+ *
+ * Temel görevleri:
+ * - Kullanıcıdan alınan verilerle yeni bir Transaction (işlem) nesnesi oluşturmak
+ * - Repository üzerinden veritabanına kaydetmek
+ * - Ekranın durumunu (başarılı, hata, yükleniyor) LiveData ile UI'a bildirmek
+ * - Hata yönetimi ve coroutine kullanımı
+ *
+ * Kodun her adımı, "neden böyle yapıldı?" ve "ne işe yarar?" sorularına cevap verecek şekilde açıklanmıştır.
+ */
 package com.ncorp.hesapp.ui.viewmodel
 
 import androidx.lifecycle.LiveData

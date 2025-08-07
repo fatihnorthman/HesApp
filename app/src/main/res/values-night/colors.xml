@@ -1,25 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Dark Theme Colors - Daha belirgin renkler -->
-    <color name="dark_purple">#1E1B4B</color>
-    <color name="chocolate_cosmos1">#7C2D12</color>
-    <color name="chocolate_cosmos2">#9A3412</color>
-    <color name="oxford_blue1">#1E3A8A</color>
-    <color name="oxford_blue2">#1E40AF</color>
-
-    <!-- Material color roles -->
-    <color name="primary">@color/oxford_blue1</color>
-    <color name="primary_variant">@color/oxford_blue2</color>
-    <color name="secondary">@color/chocolate_cosmos1</color>
-    <color name="secondary_variant">@color/chocolate_cosmos2</color>
-    <color name="background">#0F172A</color>
-    <color name="surface">#1E293B</color>
-    <color name="surface_variant">#334155</color>
+    <!-- Koyu mod için ana renk paleti (daha koyu tonlar) -->
+    <color name="primary">#c22e3a</color> <!-- Koyu kırmızı -->
+    <color name="primary_variant">#a05c6a</color> <!-- Koyu pembe -->
+    <color name="secondary">#081a20</color> <!-- Çok koyu mavi/yeşil -->
+    <color name="secondary_variant">#4e5a54</color> <!-- Koyu gri-yeşil -->
+    <color name="background">#b89e7e</color> <!-- Koyu bej -->
+    <color name="surface">#7a6650</color> <!-- Daha koyu bej -->
+    <color name="surface_variant">#5a4a3a</color> <!-- En koyu bej -->
     <color name="on_primary">#FFFFFF</color>
     <color name="on_secondary">#FFFFFF</color>
-    <color name="on_background">#F8FAFC</color>
-    <color name="on_surface">#F1F5F9</color>
-    <color name="on_surface_variant">#CBD5E1</color>
-    <color name="error">#F87171</color>
-    <color name="on_error">#000000</color>
+    <color name="on_background">#081a20</color>
+    <color name="on_surface">#e3c5a5</color>
+    <color name="on_surface_variant">#4e5a54</color>
+    <color name="error">#c22e3a</color>
+    <color name="on_error">#FFFFFF</color>
 </resources>

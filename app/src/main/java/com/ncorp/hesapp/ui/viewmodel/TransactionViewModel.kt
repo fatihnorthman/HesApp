@@ -1,3 +1,19 @@
+/*
+ * TransactionViewModel.kt
+ *
+ * Bu dosya, işlemler (gelir, gider, borç, alacak) ekranı için ViewModel sınıfını içerir.
+ * ViewModel, MVVM mimarisinde UI ile veri katmanı arasında köprü görevi görür ve ekranın durumunu yönetir.
+ *
+ * Temel görevleri:
+ * - Tüm işlemleri yükler ve saklar
+ * - Filtreleme ve arama işlemlerini yönetir
+ * - Kullanıcı arayüzüne (UI) güncel ve filtrelenmiş veri sağlar
+ * - Repository ile haberleşerek veritabanı işlemlerini gerçekleştirir
+ * - Hata ve loading durumlarını yönetir
+ *
+ * Bu dosyada, her fonksiyonun ve önemli kod bloğunun üstünde detaylı açıklamalar bulacaksınız.
+ * Kodun her adımı, "neden böyle yapıldı?" ve "ne işe yarar?" sorularına cevap verecek şekilde açıklanmıştır.
+ */
 package com.ncorp.hesapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel

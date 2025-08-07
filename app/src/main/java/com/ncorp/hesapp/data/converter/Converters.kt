@@ -1,3 +1,17 @@
+/*
+ * Converters.kt
+ *
+ * Bu dosya, Room veritabanı için özel tip dönüştürücüleri (TypeConverter) içerir.
+ * Room, sadece temel veri tiplerini (String, Int, Long, vb.) doğrudan saklayabilir.
+ * Eğer Date veya enum gibi özel tipler kullanıyorsak, bunları veritabanında saklanabilir bir tipe (ör. Long, String) dönüştürmek gerekir.
+ *
+ * Temel görevleri:
+ * - Date <-> Long dönüşümü (tarihleri milisaniye olarak saklamak için)
+ * - TransactionType <-> String dönüşümü (enum'u string olarak saklamak için)
+ * - Null güvenliği sağlamak
+ *
+ * Kodun her adımı, "neden böyle yapıldı?" ve "ne işe yarar?" sorularına cevap verecek şekilde açıklanmıştır.
+ */
 package com.ncorp.hesapp.data.converter
 
 import androidx.room.TypeConverter

@@ -5,17 +5,19 @@ import com.ncorp.hesapp.data.model.Transaction
 import com.ncorp.hesapp.data.model.TransactionType
 import kotlinx.coroutines.flow.Flow
 
-/**
- * Transaction DAO (Data Access Object)
- * 
- * İşlem verilerine erişim için Room DAO interface'i.
- * Veritabanı işlemlerini yönetir.
- * 
- * Özellikler:
- * - CRUD işlemleri (Create, Read, Update, Delete)
- * - Filtreleme ve arama
- * - Flow ile reaktif veri akışı
- * - İstatistik sorguları
+/*
+ * TransactionDao.kt
+ *
+ * Bu dosya, işlemler tablosuna (transactions) erişim sağlayan Room DAO (Data Access Object) arayüzünü içerir.
+ * DAO, veritabanı işlemlerini (ekle, sil, güncelle, sorgula) tanımlar ve uygular.
+ *
+ * Temel görevleri:
+ * - SQL sorguları ile veritabanı işlemlerini yönetmek
+ * - Flow ile reaktif veri akışı sağlamak
+ * - Performanslı ve güvenli veri erişimi sunmak
+ * - CRUD işlemlerini (Create, Read, Update, Delete) kolaylaştırmak
+ *
+ * Kodun her adımı, "neden böyle yapıldı?" ve "ne işe yarar?" sorularına cevap verecek şekilde açıklanmıştır.
  */
 @Dao
 interface TransactionDao {

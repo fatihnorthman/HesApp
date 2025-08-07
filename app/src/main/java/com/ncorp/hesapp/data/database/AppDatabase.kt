@@ -5,22 +5,25 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import android.content.Context
-import com.google.common.util.concurrent.MoreExecutors
-import com.ncorp.hesapp.BuildConfig
 import com.ncorp.hesapp.data.converter.Converters
 import com.ncorp.hesapp.data.dao.TransactionDao
 import com.ncorp.hesapp.data.model.Transaction
 
-/**
- * App Database
- * 
- * Room veritabanı sınıfı.
- * 
- * Özellikler:
- * - Transaction tablosu
- * - Type converter'lar
- * - Singleton pattern
- * - Migration desteği
+/*
+ * AppDatabase.kt
+ *
+ * Bu dosya, uygulamanın veritabanı yönetimini sağlayan Room Database sınıfını içerir.
+ * Room, Android için modern ve güvenli bir veritabanı katmanıdır. SQL sorgularını kolayca yazmayı ve veriyle güvenli şekilde çalışmayı sağlar.
+ *
+ * Bu sınıf, uygulamanın tüm verilerini sakladığı ana veritabanını oluşturur ve yönetir.
+ *
+ * Kullanılan teknolojiler:
+ * - Room: Android için ORM (Object Relational Mapping) kütüphanesi.
+ * - Singleton Pattern: Veritabanı nesnesinin uygulama boyunca tek bir örneğinin olmasını sağlar.
+ * - TypeConverters: Karmaşık veri tiplerinin veritabanında saklanabilmesini sağlar.
+ * - Migration: Veritabanı şeması değiştiğinde veri kaybı olmadan geçiş yapılmasını sağlar.
+ *
+ * Kodun her adımı, "neden böyle yapıldı?" ve "ne işe yarar?" sorularına cevap verecek şekilde açıklanmıştır.
  */
 @Database(
     entities = [Transaction::class],
@@ -48,11 +51,9 @@ abstract class AppDatabase : RoomDatabase() {
                 )
                 .fallbackToDestructiveMigration()
                 .setQueryCallback(RoomDatabase.QueryCallback { sqlQuery, bindArgs ->
-                    // Query logging in debug mode only
-                    if (BuildConfig.DEBUG) {
-                        println("SQL Query: $sqlQuery")
-                    }
-                }, MoreExecutors.directExecutor())
+                    // Query logging (debug için açılabilir)
+                    // println("SQL Query: $sqlQuery")
+                }, Runnable::run)
                 .setJournalMode(RoomDatabase.JournalMode.WRITE_AHEAD_LOGGING) // Enable WAL mode for better performance
                 .build()
                 INSTANCE = instance

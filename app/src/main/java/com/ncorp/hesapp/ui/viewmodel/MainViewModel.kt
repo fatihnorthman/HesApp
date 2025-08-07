@@ -4,20 +4,18 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-/**
- * Ana ViewModel Sınıfı
- * 
- * Bu sınıf, uygulamanın ana iş mantığını yönetir ve UI ile veri katmanı arasında
- * köprü görevi görür. Tüm işlemler ve kişi yönetimi bu ViewModel üzerinden yapılır.
- * 
- * Özellikler:
- * - İşlem yönetimi (CRUD işlemleri)
- * - Kişi yönetimi (CRUD işlemleri)
- * - İstatistik hesaplamaları
- * - Arama ve filtreleme
- * - Hata yönetimi
- * - Loading durumları
- * - Dependency injection desteği
+/*
+ * MainViewModel.kt
+ *
+ * Bu dosya, uygulamanın ana iş mantığını yöneten ViewModel sınıfını içerir.
+ * ViewModel, MVVM mimarisinde UI ile veri katmanı arasında köprü görevi görür.
+ *
+ * Temel görevleri:
+ * - İşlem ve kişi yönetimi (CRUD işlemleri)
+ * - Para birimi formatlama ve çözümleme
+ * - Hata yönetimi ve loading durumları
+ *
+ * Kodun her adımı, "neden böyle yapıldı?" ve "ne işe yarar?" sorularına cevap verecek şekilde açıklanmıştır.
  */
 @HiltViewModel
 class MainViewModel @Inject constructor() : ViewModel() {

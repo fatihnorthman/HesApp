@@ -1,3 +1,17 @@
+/*
+ * TransactionRepository.kt
+ *
+ * Bu dosya, işlemlerle ilgili veri yönetimini sağlayan Repository sınıfını içerir.
+ * Repository, MVVM mimarisinde veri kaynakları (veritabanı, ağ, cache) ile ViewModel arasında köprü görevi görür.
+ *
+ * Temel görevleri:
+ * - DAO üzerinden veritabanı işlemlerini yönetmek
+ * - Verileri cache'lemek ve performansı artırmak
+ * - ViewModel'e reaktif (Flow) veri sağlamak
+ * - Dependency injection ile test edilebilir ve modüler yapı sunmak
+ *
+ * Kodun her adımı, "neden böyle yapıldı?" ve "ne işe yarar?" sorularına cevap verecek şekilde açıklanmıştır.
+ */
 package com.ncorp.hesapp.data.repository
 
 import com.ncorp.hesapp.data.dao.TransactionDao

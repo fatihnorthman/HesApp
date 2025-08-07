@@ -20,21 +20,22 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-/**
- * Transactions Fragment
- * 
- * Bu fragment, tüm işlemleri listeler ve yönetir.
- * MVVM mimarisine uygun olarak tasarlanmıştır.
- * 
- * Özellikler:
- * - İşlem listesi görüntüleme
- * - İşlem türüne göre filtreleme
- * - Arama fonksiyonu
- * - İşlem ekleme/düzenleme/silme
- * - Swipe refresh
- * - RecyclerView ile performanslı liste
- * - State management
- * - Error handling
+/*
+ * TransactionsFragment.kt
+ *
+ * Bu dosya, uygulamanın tüm finansal işlemlerini listeleyen ve yöneten ekranı (fragment) içerir.
+ * Fragment, Android'de bir ekranın veya ekran parçasının mantığını ve arayüzünü yöneten yapılardır.
+ * Bu ekran, işlemleri listeleme, filtreleme, arama, ekleme, düzenleme ve silme gibi işlevleri içerir.
+ *
+ * Kullanılan teknolojiler:
+ * - MVVM mimarisi: Kodun okunabilirliğini ve sürdürülebilirliğini artırır.
+ * - View Binding: XML arayüz dosyalarına güvenli erişim sağlar.
+ * - Hilt: Bağımlılık enjeksiyonu ile modüler ve test edilebilir kod yazmayı sağlar.
+ * - RecyclerView: Büyük veri listelerini performanslı şekilde göstermek için kullanılır.
+ * - SwipeRefreshLayout: Kullanıcının ekranı aşağı çekerek verileri yenilemesini sağlar.
+ * - Snackbar: Kullanıcıya kısa mesajlar göstermek için kullanılır.
+ *
+ * Kodun her adımı, "neden böyle yapıldı?" ve "ne işe yarar?" sorularına cevap verecek şekilde açıklanmıştır.
  */
 @AndroidEntryPoint
 class TransactionsFragment : Fragment() {

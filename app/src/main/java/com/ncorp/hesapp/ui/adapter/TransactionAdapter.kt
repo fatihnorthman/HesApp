@@ -1,3 +1,19 @@
+/*
+ * TransactionAdapter.kt
+ *
+ * Bu dosya, işlemler listesini ekranda göstermek için kullanılan RecyclerView Adapter sınıfını içerir.
+ * RecyclerView, Android'de büyük veri listelerini performanslı şekilde göstermek için kullanılır.
+ * Adapter, veriyi alır ve her bir satır için ViewHolder ile arayüzü oluşturur.
+ * DiffUtil, listenin değişen elemanlarını hızlıca tespit ederek sadece gerekli güncellemeleri yapar.
+ *
+ * Temel görevleri:
+ * - İşlem listesini ekranda göstermek
+ * - Her işlem için arayüzü (satırı) oluşturmak ve veriyi bağlamak
+ * - Tıklama ve uzun tıklama olaylarını yönetmek
+ * - Performans için DiffUtil ile güncellemeleri optimize etmek
+ *
+ * Kodun her adımı, "neden böyle yapıldı?" ve "ne işe yarar?" sorularına cevap verecek şekilde açıklanmıştır.
+ */
 package com.ncorp.hesapp.ui.adapter
 
 import android.view.LayoutInflater
@@ -30,6 +46,13 @@ class TransactionAdapter(
     private val onItemLongClick: (Transaction) -> Boolean
 ) : ListAdapter<Transaction, TransactionAdapter.TransactionViewHolder>(TransactionDiffCallback()) {
 
+    companion object {
+        @JvmStatic
+        val dateFormat = java.text.SimpleDateFormat("dd.MM.yyyy", java.util.Locale("tr"))
+        @JvmStatic
+        val currencyFormat = java.text.NumberFormat.getCurrencyInstance(java.util.Locale("tr", "TR"))
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
         val binding = ItemTransactionBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -46,14 +69,6 @@ class TransactionAdapter(
     inner class TransactionViewHolder(
         private val binding: ItemTransactionBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-
-        // Cache formatters to avoid recreation
-        companion object {
-            @JvmStatic
-            private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale("tr"))
-            @JvmStatic
-            private val currencyFormat = java.text.NumberFormat.getCurrencyInstance(Locale("tr", "TR"))
-        }
 
         fun bind(transaction: Transaction) {
             binding.apply {
