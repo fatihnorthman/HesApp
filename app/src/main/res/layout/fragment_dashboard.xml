@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -15,39 +15,136 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:clipToPadding="false">
+
+            <!-- Hızlı İşlem Butonları (Üste alındı) -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="Hızlı İşlemler"
+                        android:textAppearance="?attr/textAppearanceTitleMedium"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <!-- 1. Satır -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAddIncome"
+                            style="@style/Widget.HesApp.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:layout_height="wrap_content"
+                            android:text="Gelir"
+                            app:icon="@drawable/ic_add" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAddExpense"
+                            style="@style/Widget.HesApp.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:layout_height="wrap_content"
+                            android:text="Gider"
+                            app:icon="@drawable/ic_add" />
+                    </LinearLayout>
+
+                    <!-- 2. Satır -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAddSale"
+                            style="@style/Widget.HesApp.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:layout_height="wrap_content"
+                            android:text="Satış"
+                            app:icon="@drawable/ic_add" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAddContact"
+                            style="@style/Widget.HesApp.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:layout_height="wrap_content"
+                            android:text="Kişi"
+                            app:icon="@drawable/ic_add" />
+                    </LinearLayout>
+
+                    <!-- 3. Satır -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnViewReports"
+                            style="@style/Widget.HesApp.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Raporlar"
+                            app:icon="@drawable/ic_reports" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Hoş Geldiniz Kartı -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="?attr/colorPrimary"
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="24dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Hoş Geldiniz!"
-                        android:textAppearance="?attr/textAppearanceHeadline5"
+                        android:textAppearance="@style/TextAppearance.HesApp.HeadlineSmall"
                         android:textColor="?attr/colorPrimary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="6dp"
                         android:text="HesApp ile finansal durumunuzu takip edin"
-                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textAppearance="@style/TextAppearance.HesApp.BodyMedium"
                         android:textColor="?attr/colorOnSurfaceVariant" />
-
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Finansal Özet Kartları -->
@@ -61,76 +158,71 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="4dp">
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/gradient_income"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:background="@drawable/gradient_income"
+                        android:padding="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/income"
-                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textAppearance="?attr/textAppearanceLabelSmall"
                             android:textColor="@android:color/white" />
 
                         <TextView
                             android:id="@+id/tvTotalIncome"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="6dp"
                             android:text="0 ₺"
-                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textAppearance="?attr/textAppearanceTitleLarge"
                             android:textColor="@android:color/white"
                             android:textStyle="bold" />
-
                     </LinearLayout>
-
                 </com.google.android.material.card.MaterialCardView>
 
                 <!-- Gider Kartı -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="4dp">
+                    android:layout_marginStart="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/gradient_expense"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:background="@drawable/gradient_expense"
+                        android:padding="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/expense"
-                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textAppearance="?attr/textAppearanceLabelSmall"
                             android:textColor="@android:color/white" />
 
                         <TextView
                             android:id="@+id/tvTotalExpense"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="6dp"
                             android:text="0 ₺"
-                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textAppearance="?attr/textAppearanceTitleLarge"
                             android:textColor="@android:color/white"
                             android:textStyle="bold" />
-
                     </LinearLayout>
-
                 </com.google.android.material.card.MaterialCardView>
-
             </LinearLayout>
 
             <!-- Net Durum Kartı -->
@@ -138,35 +230,41 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/gradient_net"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="24dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Net Durum"
-                        android:textAppearance="?attr/textAppearanceBody2"
+                        android:textAppearance="?attr/textAppearanceLabelSmall"
                         android:textColor="@android:color/white" />
 
                     <TextView
                         android:id="@+id/tvNetAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="6dp"
                         android:text="0 ₺"
-                        android:textAppearance="?attr/textAppearanceHeadline5"
-                        android:textColor="@android:color/white"
+                        android:textAppearance="?attr/textAppearanceTitleLarge"
                         android:textStyle="bold" />
-
+                    <TextView
+                        android:id="@+id/tvNetAmountAfterDebt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Borç/Alacak Sonrası Net: 0 ₺"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textStyle="bold" />
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Borç/Alacak Kartları -->
@@ -180,76 +278,71 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="4dp">
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/gradient_debt"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/debt"
-                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textAppearance="?attr/textAppearanceLabelSmall"
                             android:textColor="@android:color/white" />
 
                         <TextView
                             android:id="@+id/tvTotalDebt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="6dp"
                             android:text="0 ₺"
-                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textAppearance="?attr/textAppearanceTitleLarge"
                             android:textColor="@android:color/white"
                             android:textStyle="bold" />
-
                     </LinearLayout>
-
                 </com.google.android.material.card.MaterialCardView>
 
                 <!-- Alacak Kartı -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="4dp">
+                    android:layout_marginStart="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/gradient_receivable"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/receivable"
-                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textAppearance="?attr/textAppearanceLabelSmall"
                             android:textColor="@android:color/white" />
 
                         <TextView
                             android:id="@+id/tvTotalReceivable"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="6dp"
                             android:text="0 ₺"
-                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textAppearance="?attr/textAppearanceTitleLarge"
                             android:textColor="@android:color/white"
                             android:textStyle="bold" />
-
                     </LinearLayout>
-
                 </com.google.android.material.card.MaterialCardView>
-
             </LinearLayout>
 
             <!-- İstatistik Kartları -->
@@ -259,87 +352,82 @@
                 android:layout_marginBottom="16dp"
                 android:orientation="horizontal">
 
-                <!-- İşlemler Kartı -->
+                <!-- Son İşlemler -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="4dp">
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Toplam İşlem"
-                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:text="Son 30 Gündeki İşlem"
+                            android:textAppearance="?attr/textAppearanceLabelSmall"
                             android:textColor="?attr/colorOnSurfaceVariant" />
 
                         <TextView
                             android:id="@+id/tvRecentTransactions"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="6dp"
                             android:text="0"
-                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textAppearance="?attr/textAppearanceTitleLarge"
                             android:textColor="?attr/colorPrimary"
                             android:textStyle="bold" />
-
                     </LinearLayout>
-
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Kişiler Kartı -->
+                <!-- Toplam İşlemler -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="4dp">
+                    android:layout_marginStart="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="20dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Toplam Kişi"
-                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:text="Toplam İşlem"
+                            android:textAppearance="?attr/textAppearanceLabelSmall"
                             android:textColor="?attr/colorOnSurfaceVariant" />
 
                         <TextView
-                            android:id="@+id/tvTotalContacts"
+                            android:id="@+id/tvTotalTransactions"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="6dp"
                             android:text="0"
-                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textAppearance="?attr/textAppearanceTitleLarge"
                             android:textColor="?attr/colorPrimary"
                             android:textStyle="bold" />
-
                     </LinearLayout>
-
                 </com.google.android.material.card.MaterialCardView>
-
             </LinearLayout>
 
-            <!-- Hızlı İşlem Butonları -->
+            <!-- Kişi Sayısı Kartı -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -350,76 +438,24 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:text="Hızlı İşlemler"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="?attr/colorPrimary" />
+                        android:text="Toplam Kişi"
+                        android:textAppearance="?attr/textAppearanceLabelSmall"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tvTotalContacts"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <!-- Gelir Ekle Butonu -->
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnAddIncome"
-                            style="@style/Widget.HesApp.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
-                            android:layout_weight="1"
-                            android:text="@string/income"
-                            app:icon="@drawable/ic_add" />
-
-                        <!-- Gider Ekle Butonu -->
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnAddExpense"
-                            style="@style/Widget.HesApp.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="1"
-                            android:text="@string/expense"
-                            app:icon="@drawable/ic_add" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:orientation="horizontal">
-
-                        <!-- Kişi Ekle Butonu -->
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnAddContact"
-                            style="@style/Widget.HesApp.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
-                            android:layout_weight="1"
-                            android:text="@string/contacts"
-                            app:icon="@drawable/ic_add" />
-
-                        <!-- Raporlar Butonu -->
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnViewReports"
-                            style="@style/Widget.HesApp.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="1"
-                            android:text="@string/reports"
-                            app:icon="@drawable/ic_reports" />
-
-                    </LinearLayout>
-
+                        android:layout_marginTop="6dp"
+                        android:text="0"
+                        android:textAppearance="?attr/textAppearanceTitleLarge"
+                        android:textColor="?attr/colorPrimary"
+                        android:textStyle="bold" />
                 </LinearLayout>
-
             </com.google.android.material.card.MaterialCardView>
 
+            
+
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
-
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout> 
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

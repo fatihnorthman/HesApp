@@ -4,18 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ncorp.hesapp.R
 import com.ncorp.hesapp.data.model.TransactionType
 import com.ncorp.hesapp.databinding.FragmentTransactionsBinding
 import com.ncorp.hesapp.ui.adapter.TransactionAdapter
 import com.ncorp.hesapp.ui.viewmodel.TransactionViewModel
+import com.ncorp.hesapp.utils.ToastUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -58,9 +60,14 @@ class TransactionsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
+        // Fragment giriş animasyonu
+        val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        view.startAnimation(fadeInAnimation)
+        
         setupUI()
         setupObservers()
         setupListeners()
+        // viewModel.refreshData() satırı kaldırıldı
     }
 
     private fun setupUI() {
@@ -74,13 +81,19 @@ class TransactionsFragment : Fragment() {
     private fun setupRecyclerView() {
         transactionAdapter = TransactionAdapter(
             onItemClick = { transaction ->
-                // TODO: İşlem detay sayfasına yönlendir
-                showSnackbar("İşlem seçildi: ${transaction.description}")
+                // İşlem düzenleme sayfasına yönlendir
+                val action = TransactionsFragmentDirections.actionTransactionsToEditTransaction(transaction.id)
+                findNavController().navigate(action)
             },
             onItemLongClick = { transaction ->
-                // TODO: İşlem düzenleme/silme dialog'u göster
-                showSnackbar("İşlem düzenleme: ${transaction.description}")
+                // İşlem düzenleme sayfasına yönlendir (uzun tıklama ile de)
+                val action = TransactionsFragmentDirections.actionTransactionsToEditTransaction(transaction.id)
+                findNavController().navigate(action)
                 true
+            },
+            onDeleteClick = { transaction ->
+                // Silme dialog'u göster
+                showDeleteDialog(transaction)
             }
         )
 
@@ -146,6 +159,10 @@ class TransactionsFragment : Fragment() {
 
     private fun setupFloatingActionButton() {
         binding.fabAddTransaction.setOnClickListener {
+            // FAB animasyonu
+            val scaleAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.button_scale)
+            binding.fabAddTransaction.startAnimation(scaleAnimation)
+            
             findNavController().navigate(R.id.action_transactions_to_addTransaction)
         }
     }
@@ -200,7 +217,28 @@ class TransactionsFragment : Fragment() {
     }
 
     private fun showSnackbar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+        ToastUtils.showCustomSnackbar(binding.root, message)
+    }
+
+    private fun showDeleteDialog(transaction: com.ncorp.hesapp.data.model.Transaction) {
+        MaterialAlertDialogBuilder(requireContext(), R.style.Theme_HesApp_Dialog)
+            .setTitle(getString(R.string.delete_transaction_title))
+            .setMessage(getString(R.string.delete_transaction_message))
+            .setPositiveButton(getString(R.string.delete)) { _, _ ->
+                deleteTransaction(transaction)
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
+    }
+
+    private fun deleteTransaction(transaction: com.ncorp.hesapp.data.model.Transaction) {
+        viewModel.deleteTransaction(transaction)
+        ToastUtils.showSuccessSnackbar(binding.root, getString(R.string.transaction_deleted))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // viewModel.refreshData() kaldırıldı
     }
 
     override fun onDestroyView() {

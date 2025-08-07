@@ -18,9 +18,11 @@ package com.ncorp.hesapp.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.ncorp.hesapp.R
 import com.ncorp.hesapp.data.model.Transaction
 import com.ncorp.hesapp.data.model.TransactionType
 import com.ncorp.hesapp.data.model.getDisplayName
@@ -28,6 +30,7 @@ import com.ncorp.hesapp.data.model.getGradientRes
 import com.ncorp.hesapp.databinding.ItemTransactionBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
+import androidx.core.content.ContextCompat
 
 /**
  * Transaction Adapter
@@ -40,10 +43,12 @@ import java.util.Locale
  * - İşlem türüne göre renklendirme
  * - Tarih formatlaması
  * - Tutar formatlaması
+ * - Silme butonu desteği
  */
 class TransactionAdapter(
     private val onItemClick: (Transaction) -> Unit,
-    private val onItemLongClick: (Transaction) -> Boolean
+    private val onItemLongClick: (Transaction) -> Boolean,
+    private val onDeleteClick: (Transaction) -> Unit
 ) : ListAdapter<Transaction, TransactionAdapter.TransactionViewHolder>(TransactionDiffCallback()) {
 
     companion object {
@@ -64,52 +69,48 @@ class TransactionAdapter(
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         holder.bind(getItem(position))
+        
+        // Item animasyonu (sadece yeni eklenen item'lar için)
+        if (position == 0) {
+            val animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.item_animation_from_bottom)
+            holder.itemView.startAnimation(animation)
+        }
     }
 
-    inner class TransactionViewHolder(
-        private val binding: ItemTransactionBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-
+    inner class TransactionViewHolder(private val binding: ItemTransactionBinding) : RecyclerView.ViewHolder(binding.root) {
+        
         fun bind(transaction: Transaction) {
             binding.apply {
-                // İşlem açıklaması
                 tvDescription.text = transaction.description
-
-                // Kategori
                 tvCategory.text = transaction.category
-
-                // Tarih - cache formatted date
-                tvDate.text = dateFormat.format(transaction.date)
-
-                // Tutar - cache formatted amount
-                tvAmount.text = currencyFormat.format(transaction.amount)
-
-                // İşlem türü
+                tvDate.text = SimpleDateFormat("dd.MM.yyyy", Locale("tr")).format(transaction.date)
+                tvAmount.text = String.format("₺%.2f", transaction.amount)
                 tvType.text = transaction.type.getDisplayName()
-
-                // İşlem türüne göre renklendirme - cache context
-                val context = root.context
-                val gradientRes = transaction.type.getGradientRes()
-                ivTransactionType.setImageResource(gradientRes)
-
-                // Tutar rengi - use cached colors
-                val amountColor = getAmountColor(context, transaction.type)
-                tvAmount.setTextColor(amountColor)
-                tvType.setTextColor(amountColor)
-
-                // Click listener'lar - avoid recreating lambdas
+                
+                // İşlem türüne göre simge ayarla
+                val iconRes = when (transaction.type) {
+                    TransactionType.INCOME -> R.drawable.ic_income
+                    TransactionType.EXPENSE -> R.drawable.ic_expense
+                    TransactionType.DEBT -> R.drawable.ic_debt
+                    TransactionType.RECEIVABLE -> R.drawable.ic_receivable
+                }
+                ivTransactionType.setImageResource(iconRes)
+                
+                // İşlem türüne göre renk ayarla
+                val colorRes = when (transaction.type) {
+                    TransactionType.INCOME -> R.color.success
+                    TransactionType.EXPENSE -> R.color.error
+                    TransactionType.DEBT -> R.color.error
+                    TransactionType.RECEIVABLE -> R.color.success
+                }
+                tvAmount.setTextColor(ContextCompat.getColor(itemView.context, colorRes))
+                
+                // Silme butonu
+                btnDelete.setOnClickListener { onDeleteClick(transaction) }
+                
+                // Item tıklama
                 root.setOnClickListener { onItemClick(transaction) }
                 root.setOnLongClickListener { onItemLongClick(transaction) }
-            }
-        }
-        
-        // Cache color lookups
-        private fun getAmountColor(context: android.content.Context, type: TransactionType): Int {
-            return when (type) {
-                TransactionType.INCOME -> context.getColor(android.R.color.holo_green_dark)
-                TransactionType.EXPENSE -> context.getColor(android.R.color.holo_red_dark)
-                TransactionType.DEBT -> context.getColor(android.R.color.holo_orange_dark)
-                TransactionType.RECEIVABLE -> context.getColor(android.R.color.holo_blue_dark)
             }
         }
     }

@@ -15,6 +15,9 @@ import android.widget.ImageButton
 import androidx.navigation.NavOptions
 import com.google.android.material.card.MaterialCardView
 import android.view.animation.AnimationUtils
+import android.view.WindowManager
+import androidx.core.content.ContextCompat
+import com.ncorp.hesapp.utils.SoundUtils
 
 /*
  * MainActivity.kt
@@ -50,12 +53,19 @@ class MainActivity : AppCompatActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        
+        // SoundUtils'i başlat
+        SoundUtils.init(this)
+        
         // Performance monitoring başlat
         PerformanceMonitor.measureExecutionTime("MainActivity.onCreate") {
             // View binding'i başlat
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
+            
+            // Status bar ayarları
+            setupStatusBar()
+            
             setSupportActionBar(binding.toolbar)
 
             // Tema tercihini uygula
@@ -75,6 +85,31 @@ class MainActivity : AppCompatActivity() {
             setupNavigation()
         }
     }
+    /**
+     * Status bar ayarlarını yapılandırır
+     * Bu metod, status bar'ın tema ile uyumlu olmasını sağlar
+     * ve sistem UI ile çakışmaları önler.
+     */
+    private fun setupStatusBar() {
+        // Status bar rengini tema ile uyumlu hale getir
+        window.statusBarColor = ContextCompat.getColor(this, R.color.background)
+        
+        // Status bar içeriğinin rengini ayarla (açık/koyu tema)
+        val isDarkTheme = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+        val statusBarContentColor = if (isDarkTheme) {
+            android.graphics.Color.WHITE
+        } else {
+            android.graphics.Color.BLACK
+        }
+        
+        // Status bar içeriğinin rengini ayarla
+        window.decorView.systemUiVisibility = if (isDarkTheme) {
+            window.decorView.systemUiVisibility and android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+        } else {
+            window.decorView.systemUiVisibility or android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+    }
+
     /**
      * Navigation yapısını yapılandırır
      * Bu metod, navigation component'i başlatır ve fragment geçişlerini
@@ -110,10 +145,10 @@ class MainActivity : AppCompatActivity() {
             if (targetDestination != null && targetDestination != currentDestination) {
                 // Özel animasyon seçenekleri ile navigation
                 val navOptions = NavOptions.Builder()
-                    .setEnterAnim(R.anim.slide_in_right)
-                    .setExitAnim(R.anim.slide_out_left)
-                    .setPopEnterAnim(R.anim.slide_in_left)
-                    .setPopExitAnim(R.anim.slide_out_right)
+                    .setEnterAnim(R.anim.zoom_in)
+                    .setExitAnim(R.anim.fade_out)
+                    .setPopEnterAnim(R.anim.fade_in)
+                    .setPopExitAnim(R.anim.zoom_out)
                     .build()
                 navController.navigate(targetDestination, null, navOptions)
             }
@@ -151,6 +186,9 @@ class MainActivity : AppCompatActivity() {
             if (isDark) AppCompatDelegate.MODE_NIGHT_NO else AppCompatDelegate.MODE_NIGHT_YES
         AppCompatDelegate.setDefaultNightMode(newMode)
         prefs.edit().putBoolean("dark_mode", !isDark).apply()
+        
+        // Status bar'ı yeni temaya göre güncelle
+        setupStatusBar()
     }
     /**
      * Kaydedilmiş tema tercihini uygular

@@ -6,27 +6,9 @@
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorSurface"
-        app:elevation="0dp">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar"
-            app:menu="@menu/menu_add_transaction"
-            app:navigationIcon="@drawable/ic_back"
-            app:titleTextColor="?attr/colorOnSurface" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -219,6 +201,91 @@
                             android:clickable="true"
                             android:focusable="false"
                             android:inputType="none" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Ürün İşlemi (Satış/Alış) -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="Ürün İşlemi (Opsiyonel)"
+                        android:textAppearance="?attr/textAppearanceTitleSmall"
+                        android:textColor="?attr/colorOnSurface" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupProductFlow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipSale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Satış"
+                            android:checkable="true"
+                            app:chipBackgroundColor="@color/chip_background_color"
+                            app:chipStrokeColor="@color/gradient_income"
+                            app:chipStrokeWidth="2dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipPurchase"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Alış"
+                            android:checkable="true"
+                            app:chipBackgroundColor="@color/chip_background_color"
+                            app:chipStrokeColor="@color/gradient_expense"
+                            app:chipStrokeWidth="2dp" />
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <!-- Ürün Seçimi (Satış/gelir için) -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilProduct"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:hint="Ürün (Opsiyonel)"
+                        android:visibility="gone"
+                        app:boxCornerRadiusBottomEnd="8dp"
+                        app:boxCornerRadiusBottomStart="8dp"
+                        app:boxCornerRadiusTopEnd="8dp"
+                        app:boxCornerRadiusTopStart="8dp"
+                        app:boxStrokeColor="?attr/colorPrimary"
+                        app:hintTextColor="?attr/colorPrimary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etProduct"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="false"
+                            android:inputType="none" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Miktar -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilQuantity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:hint="Miktar"
+                        android:visibility="gone"
+                        app:boxCornerRadiusBottomEnd="8dp"
+                        app:boxCornerRadiusBottomStart="8dp"
+                        app:boxCornerRadiusTopEnd="8dp"
+                        app:boxCornerRadiusTopStart="8dp"
+                        app:boxStrokeColor="?attr/colorPrimary"
+                        app:hintTextColor="?attr/colorPrimary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etQuantity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 

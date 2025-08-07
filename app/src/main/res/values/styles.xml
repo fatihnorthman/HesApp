@@ -1,58 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Bottom Navigation Style -->
-    <style name="Widget.HesApp.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
-        <item name="android:background">@color/surface</item>
-        <item name="itemIconTint">@color/bottom_nav_item_color</item>
-        <item name="itemTextColor">@color/bottom_nav_item_color</item>
-        <item name="itemRippleColor">@color/primary</item>
-        <item name="elevation">8dp</item>
-    </style>
-    <!-- Material Button Styles -->
+    <!-- Poppins Font ile Widget Stilleri -->
+    
+    <!-- Button Stilleri -->
     <style name="Widget.HesApp.Button" parent="Widget.Material3.Button">
-        <item name="backgroundTint">@color/primary</item>
-        <item name="android:textColor">@color/on_primary</item>
-        <item name="cornerRadius">12dp</item>
-        <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">14sp</item>
     </style>
+    
+    <style name="Widget.HesApp.Button.Primary" parent="Widget.HesApp.Button">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+    
+    <style name="Widget.HesApp.Button.Secondary" parent="Widget.HesApp.Button">
+        <item name="backgroundTint">?attr/colorSecondary</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
+    
     <style name="Widget.HesApp.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
-        <item name="strokeColor">@color/primary</item>
-        <item name="android:textColor">@color/primary</item>
-        <item name="cornerRadius">12dp</item>
-        <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="strokeColor">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="cornerRadius">12dp</item>
     </style>
-    <!-- Material Card Styles -->
-    <style name="Widget.HesApp.CardView" parent="Widget.Material3.CardView.Elevated">
-        <item name="cardBackgroundColor">@color/surface</item>
-        <item name="cardCornerRadius">16dp</item>
-        <item name="cardElevation">4dp</item>
-        <item name="strokeColor">@color/primary</item>
-        <item name="strokeWidth">1dp</item>
+    
+    <!-- TextInput Stilleri -->
+    <style name="Widget.HesApp.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
     </style>
-    <!-- Material Chip Styles -->
-    <style name="Widget.HesApp.Chip" parent="Widget.Material3.Chip.Filter">
+    
+    <style name="Widget.HesApp.TextInputEditText" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    
+    <!-- Chip Stilleri -->
+    <style name="Widget.HesApp.Chip" parent="Widget.Material3.Chip.Assist">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    
+    <style name="Widget.HesApp.Chip.Filter" parent="Widget.HesApp.Chip">
         <item name="chipBackgroundColor">@color/chip_background_color</item>
         <item name="android:textColor">@color/chip_text_color</item>
-        <item name="chipStrokeColor">@color/primary</item>
-        <item name="chipStrokeWidth">1dp</item>
-        <item name="cornerRadius">20dp</item>
-        <item name="android:textSize">12sp</item>
+    </style>
+    
+    <!-- Card Stilleri -->
+    <style name="Widget.HesApp.CardView" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="contentPadding">16dp</item>
+    </style>
+    
+    <!-- Bottom Navigation Stilleri -->
+    <style name="Widget.HesApp.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
         <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="itemTextAppearanceActive">@style/TextAppearance.HesApp.LabelMedium</item>
+        <item name="itemTextAppearanceInactive">@style/TextAppearance.HesApp.LabelMedium</item>
     </style>
-    <!-- Floating Action Button Style -->
+    
+    <!-- Toolbar Stilleri -->
+    <style name="Widget.HesApp.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="titleTextAppearance">@style/TextAppearance.HesApp.TitleLarge</item>
+        <item name="titleTextColor">#f43f51</item>
+        <item name="android:textColorPrimary">#f43f51</item>
+    </style>
+    
+    <!-- Floating Action Button Stilleri -->
     <style name="Widget.HesApp.FloatingActionButton" parent="Widget.Material3.FloatingActionButton.Primary">
-        <item name="backgroundTint">@color/primary</item>
-        <item name="tint">@color/on_primary</item>
-        <item name="borderWidth">0dp</item>
-        <item name="elevation">6dp</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="tint">?attr/colorOnPrimary</item>
     </style>
-    <!-- Search View Style -->
-    <style name="Widget.HesApp.SearchView" parent="Widget.Material3.SearchView">
-        <item name="android:background">@color/surface</item>
-        <item name="queryBackground">@color/surface_variant</item>
-        <item name="android:textColor">@color/on_surface</item>
-        <item name="android:textColorHint">@color/on_surface_variant</item>
+    
+    <!-- Snackbar Stilleri -->
+    <style name="Widget.HesApp.Snackbar" parent="Widget.Material3.Snackbar">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
     </style>
+    
+    <!-- Dialog Stilleri -->
+    <style name="Theme.HesApp.Dialog" parent="ThemeOverlay.Material3.Dialog.Alert">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.HesApp.TitleLarge</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.HesApp.BodyMedium</item>
+    </style>
+    
+    <!-- List Item Stilleri -->
+    <style name="Widget.HesApp.ListItem" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
+    </style>
+    
+    <!-- SearchView Stilleri -->
+    <style name="Widget.HesApp.SearchView" parent="Widget.AppCompat.SearchView">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
+    </style>
+    
+    <!-- Icon Button Stilleri -->
+    <style name="Widget.HesApp.Button.IconButton" parent="Widget.Material3.Button.IconButton">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="cornerRadius">20dp</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconSize">20dp</item>
+    </style>
+    
 </resources> 

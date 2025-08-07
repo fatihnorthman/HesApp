@@ -15,18 +15,18 @@
         <action
             android:id="@+id/action_dashboard_to_transactions"
             app:destination="@id/transactionsFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:enterAnim="@anim/zoom_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/zoom_out" />
             
         <action
             android:id="@+id/action_dashboard_to_contacts"
             app:destination="@id/contactsFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:enterAnim="@anim/bounce_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_down" />
             
         <action
             android:id="@+id/action_dashboard_to_reports"
@@ -43,6 +43,14 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+            
+        <action
+            android:id="@+id/action_dashboard_to_addTransaction"
+            app:destination="@id/addTransactionFragment"
+            app:enterAnim="@anim/bounce_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_down" />
     </fragment>
 
     <!-- Transactions Fragment - İşlemler -->
@@ -63,10 +71,18 @@
         <action
             android:id="@+id/action_transactions_to_addTransaction"
             app:destination="@id/addTransactionFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:enterAnim="@anim/bounce_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_down" />
+            
+        <action
+            android:id="@+id/action_transactions_to_editTransaction"
+            app:destination="@id/editTransactionFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_down" />
     </fragment>
 
     <!-- Contacts Fragment - Kişiler -->
@@ -101,6 +117,13 @@
             app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
+    <!-- Products Fragment - Ürünler -->
+    <fragment
+        android:id="@+id/productsFragment"
+        android:name="com.ncorp.hesapp.ui.fragment.ProductsFragment"
+        android:label="@string/products"
+        tools:layout="@layout/fragment_products" />
+
     <!-- Settings Fragment - Ayarlar -->
     <fragment
         android:id="@+id/settingsFragment"
@@ -126,6 +149,26 @@
         
         <action
             android:id="@+id/action_addTransaction_to_transactions"
+            app:destination="@id/transactionsFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
+
+    <!-- Edit Transaction Fragment - İşlem Düzenleme -->
+    <fragment
+        android:id="@+id/editTransactionFragment"
+        android:name="com.ncorp.hesapp.ui.fragment.EditTransactionFragment"
+        android:label="@string/edit_transaction"
+        tools:layout="@layout/fragment_edit_transaction">
+        
+        <argument
+            android:name="transactionId"
+            app:argType="long" />
+            
+        <action
+            android:id="@+id/action_editTransaction_to_transactions"
             app:destination="@id/transactionsFragment"
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_out_right"

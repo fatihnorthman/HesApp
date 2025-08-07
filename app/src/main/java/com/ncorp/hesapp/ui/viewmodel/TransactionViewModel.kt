@@ -54,18 +54,8 @@ class TransactionViewModel @Inject constructor(
     private val _transactions = MutableStateFlow<List<Transaction>>(emptyList())
 
     init {
-        loadTransactions()
-        setupFiltering()
-    }
-
-    /**
-     * İşlemleri yükle
-     */
-    private fun loadTransactions() {
         viewModelScope.launch {
             transactionRepository.getAllTransactions()
-                .onStart { _uiState.value = _uiState.value.copy(isLoading = true) }
-                .onCompletion { _uiState.value = _uiState.value.copy(isLoading = false) }
                 .catch { error ->
                     _uiState.value = _uiState.value.copy(
                         error = error.message ?: "Bir hata oluştu"
@@ -79,6 +69,7 @@ class TransactionViewModel @Inject constructor(
                     )
                 }
         }
+        setupFiltering()
     }
 
     /**
@@ -203,7 +194,21 @@ class TransactionViewModel @Inject constructor(
      * Verileri yenile
      */
     fun refreshData() {
-        loadTransactions()
+        viewModelScope.launch {
+            transactionRepository.getAllTransactions()
+                .catch { error ->
+                    _uiState.value = _uiState.value.copy(
+                        error = error.message ?: "Bir hata oluştu"
+                    )
+                }
+                .collect { transactions ->
+                    _transactions.value = transactions
+                    _uiState.value = _uiState.value.copy(
+                        transactions = transactions,
+                        isEmpty = transactions.isEmpty()
+                    )
+                }
+        }
     }
 
     /**

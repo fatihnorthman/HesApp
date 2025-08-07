@@ -15,4 +15,15 @@
     <color name="on_surface_variant">#738179</color>
     <color name="error">#f43f51</color>
     <color name="on_error">#FFFFFF</color>
+    <color name="error_light">#FF8A80</color> <!-- Açık kırmızı -->
+    
+    <!-- Toast ve Snackbar renkleri -->
+    <color name="success">#4CAF50</color> <!-- Yeşil -->
+    <color name="on_success">#FFFFFF</color>
+    <color name="warning">#FF9800</color> <!-- Turuncu -->
+    <color name="on_warning">#FFFFFF</color>
+    <color name="surface_light">#fffaf7</color>
+    <color name="surface_dark">#1c1b1f</color>
+    <color name="on_surface_light">#0e323d</color>
+    <color name="on_surface_dark">#e6e1e5</color>
 </resources>

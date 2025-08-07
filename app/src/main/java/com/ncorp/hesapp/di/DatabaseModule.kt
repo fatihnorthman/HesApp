@@ -2,7 +2,11 @@ package com.ncorp.hesapp.di
 
 import android.content.Context
 import com.ncorp.hesapp.data.database.AppDatabase
+import com.ncorp.hesapp.data.dao.ContactDao
 import com.ncorp.hesapp.data.dao.TransactionDao
+import com.ncorp.hesapp.data.dao.ProductDao
+import com.ncorp.hesapp.data.repository.ContactRepository
+import com.ncorp.hesapp.data.repository.ProductRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,4 +55,16 @@ object DatabaseModule {
     fun provideTransactionDao(database: AppDatabase): TransactionDao {
         return database.transactionDao()
     }
+
+    @Provides
+    fun provideContactDao(appDatabase: AppDatabase): ContactDao = appDatabase.contactDao()
+
+    @Provides
+    fun provideContactRepository(contactDao: ContactDao): ContactRepository = ContactRepository(contactDao)
+
+    @Provides
+    fun provideProductDao(appDatabase: AppDatabase): ProductDao = appDatabase.productDao()
+
+    @Provides
+    fun provideProductRepository(productDao: ProductDao): ProductRepository = ProductRepository(productDao)
 } 

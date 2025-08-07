@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:interpolator="@android:anim/accelerate_decelerate_interpolator">
+    android:interpolator="@android:interpolator/overshoot">
     
     <scale
-        android:duration="150"
+        android:duration="120"
         android:fromXScale="1.0"
         android:fromYScale="1.0"
-        android:toXScale="0.9"
-        android:toYScale="0.9"
+        android:toXScale="0.85"
+        android:toYScale="0.85"
         android:pivotX="50%"
         android:pivotY="50%" />
         
     <scale
-        android:duration="150"
-        android:fromXScale="0.9"
-        android:fromYScale="0.9"
+        android:duration="180"
+        android:fromXScale="0.85"
+        android:fromYScale="0.85"
         android:toXScale="1.0"
         android:toYScale="1.0"
         android:pivotX="50%"
         android:pivotY="50%"
-        android:startOffset="150" />
+        android:startOffset="120" />
+        
+    <alpha
+        android:duration="120"
+        android:fromAlpha="1.0"
+        android:toAlpha="0.7"
+        android:startOffset="0" />
+        
+    <alpha
+        android:duration="180"
+        android:fromAlpha="0.7"
+        android:toAlpha="1.0"
+        android:startOffset="120" />
         
 </set> 

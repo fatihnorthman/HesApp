@@ -1,18 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Koyu mod için ana renk paleti (daha koyu tonlar) -->
-    <color name="primary">#c22e3a</color> <!-- Koyu kırmızı -->
-    <color name="primary_variant">#a05c6a</color> <!-- Koyu pembe -->
-    <color name="secondary">#081a20</color> <!-- Çok koyu mavi/yeşil -->
-    <color name="secondary_variant">#4e5a54</color> <!-- Koyu gri-yeşil -->
-    <color name="background">#b89e7e</color> <!-- Koyu bej -->
-    <color name="surface">#7a6650</color> <!-- Daha koyu bej -->
-    <color name="surface_variant">#5a4a3a</color> <!-- En koyu bej -->
-    <color name="on_primary">#FFFFFF</color>
-    <color name="on_secondary">#FFFFFF</color>
-    <color name="on_background">#081a20</color>
-    <color name="on_surface">#e3c5a5</color>
-    <color name="on_surface_variant">#4e5a54</color>
-    <color name="error">#c22e3a</color>
+    <!-- Koyu mod ana renk paleti -->
+    <color name="primary">#c82e3e</color> <!-- Koyulaştırılmış canlı kırmızı -->
+    <color name="primary_variant">#a65a66</color> <!-- Koyulaştırılmış açık kırmızı/pembe -->
+    <color name="secondary">#061e25</color> <!-- Daha koyu mavi/yeşil -->
+    <color name="secondary_variant">#4f5b56</color> <!-- Koyulaştırılmış gri-yeşil -->
+    <color name="background">#1e1a17</color> <!-- Koyu bej/kahve tonları -->
+    <color name="surface">#2a2420</color> <!-- Koyu arka plan -->
+    <color name="surface_variant">#3a302a</color> <!-- Varyant arka plan -->
+
+    <!-- Metin ve içerik renkleri -->
+    <color name="on_primary">#FFFFFF</color> <!-- Kırmızı üstü beyaz metin -->
+    <color name="on_secondary">#FFFFFF</color> <!-- İkincil renk üstü beyaz -->
+    <color name="on_background">#f0eae4</color> <!-- Açık metin -->
+    <color name="on_surface">#f0eae4</color> <!-- Açık metin -->
+    <color name="on_surface_variant">#b2ada8</color> <!-- Hafif kırık beyaz -->
+
+    <!-- Hata renkleri -->
+    <color name="error">#c82e3e</color> <!-- Aynı primary kullanıldı (kırmızı) -->
     <color name="on_error">#FFFFFF</color>
 </resources>

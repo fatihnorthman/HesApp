@@ -49,7 +49,7 @@ class TransactionRepository @Inject constructor(
 
     // Cached flows for better performance
     private val _allTransactions = transactionDao.getAllTransactions()
-        .shareIn(repositoryScope, kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(5000), 1)
+        .shareIn(repositoryScope, kotlinx.coroutines.flow.SharingStarted.Eagerly, 1)
     
     private val _financialSummary = transactionDao.getFinancialSummary()
         .shareIn(repositoryScope, kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(5000), 1)
@@ -114,7 +114,9 @@ class TransactionRepository @Inject constructor(
      * İşlem ekle
      */
     suspend fun insertTransaction(transaction: Transaction): Long {
-        return transactionDao.insertTransaction(transaction)
+        val transactionId = transactionDao.insertTransaction(transaction)
+        // Veri eklendikten sonra cache'i temizle (opsiyonel)
+        return transactionId
     }
 
     /**

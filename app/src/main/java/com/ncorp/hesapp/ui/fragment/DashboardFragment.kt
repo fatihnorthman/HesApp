@@ -4,8 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.ncorp.hesapp.R
 import com.ncorp.hesapp.databinding.FragmentDashboardBinding
+import com.ncorp.hesapp.ui.viewmodel.DashboardViewModel
+import com.ncorp.hesapp.utils.ToastUtils
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
@@ -34,6 +40,8 @@ class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
 
+    private val viewModel: DashboardViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,11 +55,15 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
+        // Fragment giriş animasyonu
+        val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        view.startAnimation(fadeInAnimation)
+        
         // UI'ı yapılandır
         setupUI()
         
-        // Örnek verileri göster
-        showSampleData()
+        // Observer'ları ayarla
+        setupObservers()
     }
 
     /**
@@ -75,24 +87,34 @@ class DashboardFragment : Fragment() {
      * ve tıklama olaylarını yönetir.
      */
     private fun setupQuickActionButtons() {
-        // Gelir ekleme butonu
+        // Hızlı işlemleri yukarıya taşıma: layout zaten card sıralı; burada yeni satış butonunu ekliyoruz
         binding.btnAddIncome.setOnClickListener {
-            // TODO: Gelir ekleme sayfasına yönlendir
+            val scaleAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.button_scale)
+            binding.btnAddIncome.startAnimation(scaleAnimation)
+            findNavController().navigate(R.id.action_dashboard_to_addTransaction)
         }
-
-        // Gider ekleme butonu
         binding.btnAddExpense.setOnClickListener {
-            // TODO: Gider ekleme sayfasına yönlendir
+            val scaleAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.button_scale)
+            binding.btnAddExpense.startAnimation(scaleAnimation)
+            findNavController().navigate(R.id.action_dashboard_to_addTransaction)
         }
-
-        // Kişi ekleme butonu
         binding.btnAddContact.setOnClickListener {
-            // TODO: Kişi ekleme sayfasına yönlendir
+            val scaleAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.button_scale)
+            binding.btnAddContact.startAnimation(scaleAnimation)
+            findNavController().navigate(R.id.action_dashboard_to_contacts)
         }
-
-        // Rapor görüntüleme butonu
         binding.btnViewReports.setOnClickListener {
-            // TODO: Raporlar sayfasına yönlendir
+            val scaleAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.button_scale)
+            binding.btnViewReports.startAnimation(scaleAnimation)
+            findNavController().navigate(R.id.action_dashboard_to_reports)
+        }
+        // Eğer layout'ta btnAddSale varsa
+        val btnAddSale = binding.root.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnAddSale)
+        btnAddSale?.setOnClickListener {
+            val scaleAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.button_scale)
+            btnAddSale.startAnimation(scaleAnimation)
+            // Satış için AddTransaction'a gidip ürün satış flow'unu kullanıcı seçecek
+            findNavController().navigate(R.id.action_dashboard_to_addTransaction)
         }
     }
 
@@ -104,37 +126,78 @@ class DashboardFragment : Fragment() {
     private fun setupSwipeRefresh() {
         binding.swipeRefresh.setOnRefreshListener {
             // Verileri yenile
-            showSampleData()
+            viewModel.loadDashboardData()
             binding.swipeRefresh.isRefreshing = false
         }
     }
 
     /**
-     * Örnek verileri gösterir
+     * Observer'ları ayarlar
      * 
-     * Bu metod, dashboard'da örnek verileri gösterir.
+     * Bu metod, ViewModel'den gelen verileri dinler ve UI'ı günceller.
      */
-    private fun showSampleData() {
+    private fun setupObservers() {
+        viewModel.dashboardData.observe(viewLifecycleOwner) { data -> updateDashboardUI(data) }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { /* TODO loading */ }
+
+        viewModel.error.observe(viewLifecycleOwner) { it?.let { ToastUtils.showErrorSnackbar(binding.root, it); viewModel.clearError() } }
+    }
+
+    /**
+     * Dashboard UI'ını günceller
+     * 
+     * Bu metod, ViewModel'den gelen verileri kullanarak UI'ı günceller.
+     */
+    private fun updateDashboardUI(data: DashboardViewModel.DashboardData) {
         // Toplam gelir
-        binding.tvTotalIncome.text = "15.750 ₺"
+        binding.tvTotalIncome.text = data.totalIncome
         
         // Toplam gider
-        binding.tvTotalExpense.text = "8.250 ₺"
+        binding.tvTotalExpense.text = data.totalExpense
         
         // Net durum
-        binding.tvNetAmount.text = "7.500 ₺"
+        binding.tvNetAmount.text = data.netAmount
+        
+        // Borç/Alacak sonrası net durum
+        binding.tvNetAmountAfterDebt.text = "Borç/Alacak Sonrası Net: ${data.netAmountAfterDebt}"
         
         // Toplam borç
-        binding.tvTotalDebt.text = "2.500 ₺"
+        binding.tvTotalDebt.text = data.totalDebt
         
         // Toplam alacak
-        binding.tvTotalReceivable.text = "1.800 ₺"
+        binding.tvTotalReceivable.text = data.totalReceivable
         
         // Son işlemler sayısı
-        binding.tvRecentTransactions.text = "24"
+        binding.tvRecentTransactions.text = data.recentTransactions
+        
+        // Toplam işlem sayısı
+        binding.tvTotalTransactions.text = data.totalTransactions
         
         // Toplam kişi sayısı
-        binding.tvTotalContacts.text = "12"
+        binding.tvTotalContacts.text = data.totalContacts
+
+        // Net durum rengini ayarla
+        updateNetAmountColor(data.rawNetAmount)
+        updateNetAmountAfterDebtColor(data.rawNetAmountAfterDebt)
+    }
+
+    private fun updateNetAmountAfterDebtColor(netAmountAfterDebt: Double) {
+        val colorRes = if (netAmountAfterDebt >= 0) {
+            R.color.success
+        } else {
+            R.color.error_light
+        }
+        binding.tvNetAmountAfterDebt.setTextColor(resources.getColor(colorRes, null))
+    }
+
+    private fun updateNetAmountColor(netAmount: Double) {
+        val colorRes = if (netAmount >= 0) {
+            R.color.success
+        } else {
+            R.color.error_light
+        }
+        binding.tvNetAmount.setTextColor(resources.getColor(colorRes, null))
     }
 
     override fun onDestroyView() {

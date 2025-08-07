@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ncorp.hesapp.data.model.Transaction
 import com.ncorp.hesapp.data.model.TransactionType
+import com.ncorp.hesapp.data.repository.ProductRepository
 import com.ncorp.hesapp.data.repository.TransactionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -28,7 +29,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddTransactionViewModel @Inject constructor(
-    private val transactionRepository: TransactionRepository
+    private val transactionRepository: TransactionRepository,
+    private val productRepository: ProductRepository
 ) : ViewModel() {
 
     private val _uiState = MutableLiveData<AddTransactionUiState>(AddTransactionUiState.Idle)
@@ -40,12 +42,33 @@ class AddTransactionViewModel @Inject constructor(
         category: String,
         amount: Double,
         date: Date,
-        notes: String? = null,
-        contactId: Long? = null
+        notes: String?,
+        contactId: Long? = null,
+        productId: Long? = null,
+        quantity: Int? = null
     ) {
         viewModelScope.launch {
             try {
                 _uiState.value = AddTransactionUiState.Loading
+                
+                // Ürün stok güncellemesi (satış/alış)
+                if (productId != null && quantity != null && quantity > 0) {
+                    when (type) {
+                        TransactionType.INCOME -> {
+                            // Satış
+                            val updated = productRepository.decrementStock(productId, quantity)
+                            if (updated == 0) {
+                                _uiState.value = AddTransactionUiState.Error("Yetersiz stok")
+                                return@launch
+                            }
+                        }
+                        TransactionType.EXPENSE -> {
+                            // Alış
+                            productRepository.incrementStock(productId, quantity)
+                        }
+                        else -> { /* no-op */ }
+                    }
+                }
 
                 val transaction = Transaction(
                     type = type,
@@ -55,17 +78,18 @@ class AddTransactionViewModel @Inject constructor(
                     date = date,
                     notes = notes,
                     contactId = contactId,
-                    createdAt = Date(),
-                    updatedAt = Date()
+                    productId = productId
                 )
-
-                transactionRepository.addTransaction(transaction)
-                _uiState.value = AddTransactionUiState.Success
-
+                
+                val transactionId = transactionRepository.addTransaction(transaction)
+                
+                if (transactionId > 0) {
+                    _uiState.value = AddTransactionUiState.Success
+                } else {
+                    _uiState.value = AddTransactionUiState.Error("İşlem eklenirken hata oluştu")
+                }
             } catch (e: Exception) {
-                _uiState.value = AddTransactionUiState.Error(
-                    message = e.message ?: "İşlem kaydedilirken bir hata oluştu"
-                )
+                _uiState.value = AddTransactionUiState.Error("İşlem eklenirken hata oluştu: ${e.message}")
             }
         }
     }

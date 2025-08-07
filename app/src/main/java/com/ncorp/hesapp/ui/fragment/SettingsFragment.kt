@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
+import com.ncorp.hesapp.R
 import com.ncorp.hesapp.databinding.FragmentSettingsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,6 +27,10 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
+        // Fragment giriş animasyonu
+        val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        view.startAnimation(fadeInAnimation)
         
         // TODO: Ayarlar sayfası implementasyonu
         binding.tvSettings.text = "Ayarlar sayfası yakında gelecek..."

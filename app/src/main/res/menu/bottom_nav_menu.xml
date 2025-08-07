@@ -13,6 +13,12 @@
         android:icon="@drawable/ic_transactions"
         android:title="@string/transactions" />
 
+    <!-- Products - Ürünler -->
+    <item
+        android:id="@+id/productsFragment"
+        android:icon="@drawable/ic_add"
+        android:title="@string/products" />
+
     <!-- Contacts - Kişiler -->
     <item
         android:id="@+id/contactsFragment"

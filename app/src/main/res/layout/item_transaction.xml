@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
+    android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="4dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="2dp"
-    app:strokeWidth="1dp"
-    app:strokeColor="?attr/colorOutline">
+    app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,65 +14,49 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <!-- Transaction Type Icon -->
         <ImageView
             android:id="@+id/ivTransactionType"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/gradient_income"
-            android:contentDescription="@string/type"
-            android:padding="12dp"
-            android:src="@drawable/ic_transactions"
-            app:tint="?attr/colorOnPrimary" />
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_income"
+            android:contentDescription="İşlem Türü" />
 
-        <!-- Transaction Details -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="İşlem Açıklaması"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="?attr/colorOnSurface"
-                android:textStyle="bold"
-                tools:text="Müşteri ödemesi" />
+                android:text="Açıklama"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:text="Kategori"
-                android:textAppearance="?attr/textAppearanceBody2"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                tools:text="Satış" />
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurfaceVariant" />
 
             <TextView
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:text="Tarih"
-                android:textAppearance="?attr/textAppearanceCaption"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                tools:text="15.12.2024" />
-
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurfaceVariant" />
         </LinearLayout>
 
-        <!-- Transaction Amount -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
             android:orientation="vertical"
             android:gravity="end">
 
@@ -83,24 +64,27 @@
                 android:id="@+id/tvAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="₺1,250.00"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="?attr/colorPrimary"
-                android:textStyle="bold"
-                tools:text="₺1,250.00" />
+                android:text="₺0.00"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Gelir"
-                android:textAppearance="?attr/textAppearanceCaption"
-                android:textColor="?attr/colorPrimary"
-                tools:text="Gelir" />
+                android:text="Tür"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorPrimary" />
 
+            <ImageButton
+                android:id="@+id/btnDelete"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_delete"
+                android:contentDescription="Sil"
+                android:tint="?attr/colorError"
+                android:visibility="gone" />
         </LinearLayout>
-
     </LinearLayout>
-
 </com.google.android.material.card.MaterialCardView> 

@@ -4,37 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
     <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:minHeight="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar">
+        android:background="@android:color/transparent"
+        android:elevation="0dp"
+        style="@style/Widget.HesApp.Toolbar">
 
         <!-- Geliştirilmiş Tema Geçiş Butonu -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/btnThemeToggle"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            app:cardCornerRadius="24dp"
+            app:cardCornerRadius="20dp"
             app:cardElevation="4dp"
             app:strokeWidth="1dp"
-            app:strokeColor="?attr/colorOnPrimary"
-            app:cardBackgroundColor="?attr/colorSurfaceVariant">
+            app:strokeColor="?attr/colorOutline"
+            app:cardBackgroundColor="?attr/colorSurface">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:contentDescription="@string/theme"
                 android:src="@drawable/ic_theme"
@@ -67,6 +73,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"
+        android:background="@drawable/bottom_nav_background" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

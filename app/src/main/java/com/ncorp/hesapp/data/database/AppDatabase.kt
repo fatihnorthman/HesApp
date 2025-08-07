@@ -7,7 +7,11 @@ import androidx.room.TypeConverters
 import android.content.Context
 import com.ncorp.hesapp.data.converter.Converters
 import com.ncorp.hesapp.data.dao.TransactionDao
+import com.ncorp.hesapp.data.dao.ContactDao
+import com.ncorp.hesapp.data.dao.ProductDao
 import com.ncorp.hesapp.data.model.Transaction
+import com.ncorp.hesapp.data.model.Contact
+import com.ncorp.hesapp.data.model.Product
 
 /*
  * AppDatabase.kt
@@ -26,8 +30,8 @@ import com.ncorp.hesapp.data.model.Transaction
  * Kodun her adımı, "neden böyle yapıldı?" ve "ne işe yarar?" sorularına cevap verecek şekilde açıklanmıştır.
  */
 @Database(
-    entities = [Transaction::class],
-    version = 1,
+    entities = [Transaction::class, Contact::class, Product::class],
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -37,6 +41,16 @@ abstract class AppDatabase : RoomDatabase() {
      * Transaction DAO
      */
     abstract fun transactionDao(): TransactionDao
+
+    /**
+     * Contact DAO
+     */
+    abstract fun contactDao(): ContactDao
+
+    /**
+     * Product DAO
+     */
+    abstract fun productDao(): ProductDao
 
     companion object {
         @Volatile
