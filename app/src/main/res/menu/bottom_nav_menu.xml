@@ -25,12 +25,6 @@
         android:icon="@drawable/ic_contacts"
         android:title="@string/contacts" />
 
-    <!-- Reports - Raporlar -->
-    <item
-        android:id="@+id/reportsFragment"
-        android:icon="@drawable/ic_reports"
-        android:title="@string/reports" />
-
     <!-- Settings - Ayarlar -->
     <item
         android:id="@+id/settingsFragment"

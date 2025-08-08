@@ -31,7 +31,7 @@ import com.ncorp.hesapp.data.model.Product
  */
 @Database(
     entities = [Transaction::class, Contact::class, Product::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

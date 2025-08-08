@@ -262,7 +262,7 @@
                         android:layout_marginTop="4dp"
                         android:text="Borç/Alacak Sonrası Net: 0 ₺"
                         android:textAppearance="?attr/textAppearanceBodyMedium"
-                        android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textColor="@android:color/white"
                         android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

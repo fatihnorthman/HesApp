@@ -83,7 +83,7 @@
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_delete"
                 android:contentDescription="Sil"
-                android:tint="?attr/colorError"
+                app:tint="?attr/colorError"
                 android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ncorp.hesapp.R
 import com.ncorp.hesapp.data.model.Contact
@@ -37,6 +38,7 @@ class AddTransactionFragment : Fragment() {
     private val viewModel: AddTransactionViewModel by viewModels()
     private val contactsViewModel: ContactsViewModel by viewModels()
     private val productsViewModel: ProductsViewModel by viewModels()
+    private val args: AddTransactionFragmentArgs by navArgs()
 
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private var selectedDate: Date = Date()
@@ -65,6 +67,9 @@ class AddTransactionFragment : Fragment() {
         observeViewModel()
         observeContacts()
         observeProducts()
+
+        // Dashboard'dan satış/alış hızlı aksiyonu ile gelindiyse ön seçim yap
+        handlePreselectedFlow()
     }
 
     private fun setupViews() {
@@ -77,28 +82,28 @@ class AddTransactionFragment : Fragment() {
             if (isChecked) {
                 SoundUtils.playButtonClick()
                 updateContactFieldVisibility(R.id.chipIncome)
-                ensureProductSectionVisibility(null)
+                syncProductSectionWithFlow()
             }
         }
         binding.chipExpense.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 SoundUtils.playButtonClick()
                 updateContactFieldVisibility(R.id.chipExpense)
-                ensureProductSectionVisibility(null)
+                syncProductSectionWithFlow()
             }
         }
         binding.chipDebt.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 SoundUtils.playButtonClick()
                 updateContactFieldVisibility(R.id.chipDebt)
-                ensureProductSectionVisibility(null)
+                syncProductSectionWithFlow()
             }
         }
         binding.chipReceivable.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 SoundUtils.playButtonClick()
                 updateContactFieldVisibility(R.id.chipReceivable)
-                ensureProductSectionVisibility(null)
+                syncProductSectionWithFlow()
             }
         }
 
@@ -109,6 +114,16 @@ class AddTransactionFragment : Fragment() {
                 binding.tilProduct.visibility = View.VISIBLE
                 binding.tilQuantity.visibility = View.VISIBLE
                 binding.chipIncome.isChecked = true // Satış => Gelir
+                // İlk seçimde ürün yoksa diyalogu aç
+                if (selectedProduct == null && productsList.isNotEmpty()) {
+                    showProductPickerDialog()
+                }
+            } else {
+                // Satış kapandıysa ve alış da kapalıysa ürün alanını gizle/temizle
+                if (!binding.chipPurchase.isChecked) {
+                    clearProductSelection()
+                    syncProductSectionWithFlow()
+                }
             }
         }
         binding.chipPurchase.setOnCheckedChangeListener { _, isChecked ->
@@ -117,6 +132,16 @@ class AddTransactionFragment : Fragment() {
                 binding.tilProduct.visibility = View.VISIBLE
                 binding.tilQuantity.visibility = View.VISIBLE
                 binding.chipExpense.isChecked = true // Alış => Gider
+                // İlk seçimde ürün yoksa diyalogu aç
+                if (selectedProduct == null && productsList.isNotEmpty()) {
+                    showProductPickerDialog()
+                }
+            } else {
+                // Alış kapandıysa ve satış da kapalıysa ürün alanını gizle/temizle
+                if (!binding.chipSale.isChecked) {
+                    clearProductSelection()
+                    syncProductSectionWithFlow()
+                }
             }
         }
 
@@ -156,22 +181,55 @@ class AddTransactionFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             productsViewModel.products.collectLatest { list ->
                 productsList = list
+                // Eğer preselect bekliyorsak ve liste geldi ise diyalogu aç
+                maybeOpenProductDialogAfterPreselect()
             }
         }
     }
 
-    private fun ensureProductSectionVisibility(defaultVisibility: Boolean?) {
-        if (defaultVisibility == null) {
-            // Tür chip'lerinden biri seçildiğinde ürün alanını kapat
-            binding.tilProduct.visibility = View.GONE
-            binding.tilQuantity.visibility = View.GONE
-            selectedProduct = null
-            binding.etProduct.setText("")
-            binding.etQuantity.setText("")
-        } else {
-            binding.tilProduct.visibility = if (defaultVisibility) View.VISIBLE else View.GONE
-            binding.tilQuantity.visibility = if (defaultVisibility) View.VISIBLE else View.GONE
+    private var pendingPreselectFlow: String? = null
+
+    private fun handlePreselectedFlow() {
+        val flow = args.preselectFlow
+        if (flow.isNullOrEmpty()) return
+        pendingPreselectFlow = flow
+        when (flow.lowercase(Locale.getDefault())) {
+            "sale" -> {
+                binding.chipSale.isChecked = true
+                binding.tilProduct.visibility = View.VISIBLE
+                binding.tilQuantity.visibility = View.VISIBLE
+                binding.chipIncome.isChecked = true
+            }
+            "purchase" -> {
+                binding.chipPurchase.isChecked = true
+                binding.tilProduct.visibility = View.VISIBLE
+                binding.tilQuantity.visibility = View.VISIBLE
+                binding.chipExpense.isChecked = true
+            }
         }
+        maybeOpenProductDialogAfterPreselect()
+    }
+
+    private fun maybeOpenProductDialogAfterPreselect() {
+        val flow = pendingPreselectFlow ?: return
+        // Ürünler yüklendiyse diyalogu bir kez aç
+        if (productsList.isNotEmpty()) {
+            pendingPreselectFlow = null
+            // Kısa bir gecikme ile UI stabilize olsun
+            view?.post { showProductPickerDialog() }
+        }
+    }
+
+    private fun syncProductSectionWithFlow() {
+        val shouldShow = binding.chipSale.isChecked || binding.chipPurchase.isChecked
+        binding.tilProduct.visibility = if (shouldShow) View.VISIBLE else View.GONE
+        binding.tilQuantity.visibility = if (shouldShow) View.VISIBLE else View.GONE
+    }
+
+    private fun clearProductSelection() {
+        selectedProduct = null
+        binding.etProduct.setText("")
+        binding.etQuantity.setText("")
     }
 
     private fun updateContactFieldVisibility(chipId: Int?) {

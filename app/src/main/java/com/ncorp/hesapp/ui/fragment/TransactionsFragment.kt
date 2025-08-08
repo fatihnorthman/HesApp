@@ -10,6 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ncorp.hesapp.R
@@ -102,6 +104,8 @@ class TransactionsFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
         }
+
+        attachSwipeToDelete()
     }
 
     private fun setupSearchView() {
@@ -116,6 +120,40 @@ class TransactionsFragment : Fragment() {
                 return true
             }
         })
+    }
+
+    private fun attachSwipeToDelete() {
+        val swipeCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.bindingAdapterPosition
+                if (position == RecyclerView.NO_POSITION) return
+                val item = transactionAdapter.currentList.getOrNull(position)
+                if (item == null) {
+                    transactionAdapter.notifyItemChanged(position)
+                    return
+                }
+                MaterialAlertDialogBuilder(requireContext(), R.style.Theme_HesApp_Dialog)
+                    .setTitle(getString(R.string.delete_transaction_title))
+                    .setMessage(getString(R.string.delete_transaction_message))
+                    .setPositiveButton(getString(R.string.delete)) { _, _ ->
+                        deleteTransaction(item)
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+                        transactionAdapter.notifyItemChanged(position)
+                    }
+                    .setOnCancelListener {
+                        transactionAdapter.notifyItemChanged(position)
+                    }
+                    .show()
+            }
+        }
+        ItemTouchHelper(swipeCallback).attachToRecyclerView(binding.recyclerView)
     }
 
     private fun setupFilterChips() {

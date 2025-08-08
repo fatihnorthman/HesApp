@@ -54,6 +54,8 @@ class ContactsFragment : Fragment() {
         }
     }
 
+    // Swipe-to-delete kaldırıldı; silme sadece butonla yapılacak
+
     private fun observeContacts() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.contacts.collectLatest { contacts ->

@@ -18,6 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@android:color/transparent"
         android:elevation="0dp"
+        app:logo="@mipmap/ic_launcher"
         style="@style/Widget.HesApp.Toolbar">
 
         <!-- Geliştirilmiş Tema Geçiş Butonu -->

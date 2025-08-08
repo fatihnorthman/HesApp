@@ -12,6 +12,7 @@ import androidx.navigation.ui.setupWithNavController
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import android.widget.ImageButton
+import android.os.StrictMode
 import androidx.navigation.NavOptions
 import com.google.android.material.card.MaterialCardView
 import android.view.animation.AnimationUtils
@@ -59,6 +60,9 @@ class MainActivity : AppCompatActivity() {
         
         // Performance monitoring başlat
         PerformanceMonitor.measureExecutionTime("MainActivity.onCreate") {
+            // Tema tercihini çok erken uygula (UI yüklenmeden önce)
+            applySavedTheme()
+            
             // View binding'i başlat
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
@@ -67,9 +71,6 @@ class MainActivity : AppCompatActivity() {
             setupStatusBar()
             
             setSupportActionBar(binding.toolbar)
-
-            // Tema tercihini uygula
-            applySavedTheme()
 
             // Geliştirilmiş tema geçiş butonu
             binding.btnThemeToggle.setOnClickListener {
@@ -137,8 +138,8 @@ class MainActivity : AppCompatActivity() {
             val targetDestination = when (item.itemId) {
                 R.id.dashboardFragment -> R.id.dashboardFragment
                 R.id.transactionsFragment -> R.id.transactionsFragment
+                R.id.productsFragment -> R.id.productsFragment
                 R.id.contactsFragment -> R.id.contactsFragment
-                R.id.reportsFragment -> R.id.reportsFragment
                 R.id.settingsFragment -> R.id.settingsFragment
                 else -> null
             }
@@ -181,7 +182,12 @@ class MainActivity : AppCompatActivity() {
      */
     private fun toggleTheme() {
         val prefs = getSharedPreferences("settings", MODE_PRIVATE)
-        val isDark = prefs.getBoolean("dark_mode", false)
+        val oldPolicy = StrictMode.allowThreadDiskReads()
+        val isDark = try {
+            prefs.getBoolean("dark_mode", false)
+        } finally {
+            StrictMode.setThreadPolicy(oldPolicy)
+        }
         val newMode =
             if (isDark) AppCompatDelegate.MODE_NIGHT_NO else AppCompatDelegate.MODE_NIGHT_YES
         AppCompatDelegate.setDefaultNightMode(newMode)
@@ -197,7 +203,12 @@ class MainActivity : AppCompatActivity() {
      */
     private fun applySavedTheme() {
         val prefs = getSharedPreferences("settings", MODE_PRIVATE)
-        val isDark = prefs.getBoolean("dark_mode", false)
+        val oldPolicy = StrictMode.allowThreadDiskReads()
+        val isDark = try {
+            prefs.getBoolean("dark_mode", false)
+        } finally {
+            StrictMode.setThreadPolicy(oldPolicy)
+        }
         val mode =
             if (isDark) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
         AppCompatDelegate.setDefaultNightMode(mode)

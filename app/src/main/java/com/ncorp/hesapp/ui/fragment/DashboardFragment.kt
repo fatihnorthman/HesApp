@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.core.os.bundleOf
 import com.ncorp.hesapp.R
 import com.ncorp.hesapp.databinding.FragmentDashboardBinding
 import com.ncorp.hesapp.ui.viewmodel.DashboardViewModel
@@ -113,8 +114,9 @@ class DashboardFragment : Fragment() {
         btnAddSale?.setOnClickListener {
             val scaleAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.button_scale)
             btnAddSale.startAnimation(scaleAnimation)
-            // Satış için AddTransaction'a gidip ürün satış flow'unu kullanıcı seçecek
-            findNavController().navigate(R.id.action_dashboard_to_addTransaction)
+            // Satış akışı için AddTransaction'a gidip ürün seçim diyaloğunu aç
+            val args = bundleOf("preselectFlow" to "sale")
+            findNavController().navigate(R.id.action_dashboard_to_addTransaction, args)
         }
     }
 

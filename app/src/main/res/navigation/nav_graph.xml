@@ -146,6 +146,11 @@
         android:name="com.ncorp.hesapp.ui.fragment.AddTransactionFragment"
         android:label="@string/add_transaction"
         tools:layout="@layout/fragment_add_transaction">
+        <argument
+            android:name="preselectFlow"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
         
         <action
             android:id="@+id/action_addTransaction_to_transactions"
