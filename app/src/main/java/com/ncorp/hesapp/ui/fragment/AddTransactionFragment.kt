@@ -46,6 +46,7 @@ class AddTransactionFragment : Fragment() {
 
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private var selectedDate: Date = Date()
+    private var selectedDueDate: Date? = null
     private var selectedContact: Contact? = null
     private var contactsList: List<Contact> = emptyList()
     private var productsList: List<Product> = emptyList()
@@ -118,6 +119,7 @@ class AddTransactionFragment : Fragment() {
                 SoundUtils.playButtonClick()
                 updateContactFieldVisibility(R.id.chipDebt)
                 syncProductSectionWithFlow()
+                binding.tilDueDate.visibility = View.VISIBLE
             }
         }
         binding.chipReceivable.setOnCheckedChangeListener { _, isChecked ->
@@ -125,6 +127,7 @@ class AddTransactionFragment : Fragment() {
                 SoundUtils.playButtonClick()
                 updateContactFieldVisibility(R.id.chipReceivable)
                 syncProductSectionWithFlow()
+                binding.tilDueDate.visibility = View.VISIBLE
             }
         }
 
@@ -173,6 +176,11 @@ class AddTransactionFragment : Fragment() {
         binding.etDate.setOnClickListener {
             SoundUtils.playButtonClick()
             showDatePicker()
+        }
+
+        binding.etDueDate.setOnClickListener {
+            SoundUtils.playButtonClick()
+            showDueDatePicker()
         }
 
         binding.etContact.setOnClickListener {
@@ -295,6 +303,21 @@ class AddTransactionFragment : Fragment() {
         ).show()
     }
 
+    private fun showDueDatePicker() {
+        val calendar = Calendar.getInstance().apply { time = selectedDueDate ?: selectedDate }
+        DatePickerDialog(
+            requireContext(),
+            { _, year, month, dayOfMonth ->
+                calendar.set(year, month, dayOfMonth)
+                selectedDueDate = calendar.time
+                binding.etDueDate.setText(dateFormat.format(selectedDueDate!!))
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
     private fun showContactPickerDialog() {
         val contacts = contactsList
         if (contacts.isEmpty()) {
@@ -396,6 +419,12 @@ class AddTransactionFragment : Fragment() {
                     binding.tilQuantity.error = "Miktar gerekli"
                     return
                 }
+                // Hesap sadece nakit (satış-gelir / alış-gider) akışı için zorunlu
+                val isCashBased = (isSale && transactionType == TransactionType.INCOME) || (isPurchase && transactionType == TransactionType.EXPENSE)
+                if (isCashBased && selectedAccountId == null) {
+                    ToastUtils.showErrorSnackbar(binding.root, "Hesap seçin")
+                    return
+                }
                 parsedQuantity = try {
                     quantityText.toIntOrNull()
                 } catch (e: NumberFormatException) {
@@ -420,11 +449,14 @@ class AddTransactionFragment : Fragment() {
                 amount = amount,
                 currency = selectedCurrency,
                 date = selectedDate,
+                dueDate = selectedDueDate,
                 notes = notes.ifEmpty { null },
                 contactId = selectedContact?.id,
                 productId = selectedProduct?.id,
                 quantity = parsedQuantity,
-                accountId = selectedAccountId
+                accountId = selectedAccountId,
+                isSaleFlow = isSale,
+                isPurchaseFlow = isPurchase
             )
         } catch (e: Exception) {
             ToastUtils.showErrorSnackbar(binding.root, "İşlem kaydedilirken hata oluştu: ${e.message}")

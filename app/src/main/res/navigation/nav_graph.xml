@@ -153,7 +153,29 @@
         android:id="@+id/accountsFragment"
         android:name="com.ncorp.hesapp.ui.fragment.AccountsFragment"
         android:label="Hesaplar"
-        tools:layout="@layout/fragment_accounts" />
+        tools:layout="@layout/fragment_accounts" >
+        <action
+            android:id="@+id/action_accounts_to_accountDetail"
+            app:destination="@id/accountDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <!-- Account Detail Fragment - Hesap Detayı -->
+    <fragment
+        android:id="@+id/accountDetailFragment"
+        android:name="com.ncorp.hesapp.ui.fragment.AccountDetailFragment"
+        android:label="Hesap Detayı"
+        tools:layout="@layout/fragment_account_detail">
+        <argument
+            android:name="accountId"
+            app:argType="long" />
+        <argument
+            android:name="accountName"
+            app:argType="string" />
+    </fragment>
 
     <!-- Payment Fragment - Borç Ödeme -->
     <fragment

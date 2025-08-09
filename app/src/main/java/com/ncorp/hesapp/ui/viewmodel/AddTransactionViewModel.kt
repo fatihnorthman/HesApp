@@ -50,7 +50,9 @@ class AddTransactionViewModel @Inject constructor(
         contactId: Long? = null,
         productId: Long? = null,
         quantity: Int? = null,
-        accountId: Long? = null
+        accountId: Long? = null,
+        isSaleFlow: Boolean = false,
+        isPurchaseFlow: Boolean = false
     ) {
         viewModelScope.launch {
             try {
@@ -58,20 +60,18 @@ class AddTransactionViewModel @Inject constructor(
                 
                 // Ürün stok güncellemesi (satış/alış)
                 if (productId != null && quantity != null && quantity > 0) {
-                    when (type) {
-                        TransactionType.INCOME -> {
-                            // Satış
-                            val updated = productRepository.decrementStock(productId, quantity)
-                            if (updated == 0) {
-                                _uiState.value = AddTransactionUiState.Error("Yetersiz stok")
-                                return@launch
-                            }
+                    if (isSaleFlow) {
+                        val updated = productRepository.decrementStock(productId, quantity)
+                        if (updated == 0) {
+                            _uiState.value = AddTransactionUiState.Error("Yetersiz stok")
+                            return@launch
                         }
-                        TransactionType.EXPENSE -> {
-                            // Alış
-                            productRepository.incrementStock(productId, quantity)
+                    } else if (isPurchaseFlow) {
+                        val updated = productRepository.incrementStock(productId, quantity)
+                        if (updated == 0) {
+                            _uiState.value = AddTransactionUiState.Error("Stok güncellenemedi")
+                            return@launch
                         }
-                        else -> { /* no-op */ }
                     }
                 }
 
@@ -84,6 +84,7 @@ class AddTransactionViewModel @Inject constructor(
                     date = date,
                     notes = notes,
                     contactId = contactId,
+                    accountId = accountId,
                     productId = productId
                 )
                 
@@ -98,16 +99,11 @@ class AddTransactionViewModel @Inject constructor(
                                 return@launch
                             }
 
-                        val newBalance = when (type) {
-                            TransactionType.INCOME -> account.balance + amount // Satış
-                            TransactionType.EXPENSE -> {
-                                val candidate = account.balance - amount // Alış
-                                if (candidate < 0) {
-                                    _uiState.value = AddTransactionUiState.Error("Yetersiz bakiye")
-                                    return@launch
-                                }
-                                candidate
-                            }
+                        val newBalance = when {
+                            isSaleFlow && type == TransactionType.INCOME -> account.balance + amount
+                            isPurchaseFlow && type == TransactionType.EXPENSE -> account.balance - amount
+                            // Borçlu satın alım: DEBT + purchase akışı varsa kasadan düş (negatif izinli)
+                            isPurchaseFlow && type == TransactionType.DEBT -> account.balance - amount
                             else -> account.balance
                         }
                         bankAccountRepository.updateBalance(account.id, newBalance)
