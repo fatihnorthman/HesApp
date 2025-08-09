@@ -171,6 +171,18 @@ interface TransactionDao {
      */
     @Query("SELECT * FROM transactions ORDER BY date DESC LIMIT :limit")
     fun getLatestTransactions(limit: Int): Flow<List<Transaction>>
+
+    /**
+     * Belirli bir borç işlemine bağlı tüm borç ödemelerinin toplamını getir
+     */
+    @Query("SELECT COALESCE(SUM(amount), 0) FROM transactions WHERE parentTransactionId = :debtId AND type = 'DEBT_PAYMENT'")
+    suspend fun getTotalPaymentsForDebt(debtId: Long): Double
+
+    /**
+     * Belirli bir alacak işlemine bağlı tüm tahsilatların toplamını getir
+     */
+    @Query("SELECT COALESCE(SUM(amount), 0) FROM transactions WHERE parentTransactionId = :receivableId AND type = 'RECEIVABLE_COLLECTION'")
+    suspend fun getTotalCollectionsForReceivable(receivableId: Long): Double
     
     /**
      * Performanslı istatistik sorgusu (tek sorguda tüm toplamlar)

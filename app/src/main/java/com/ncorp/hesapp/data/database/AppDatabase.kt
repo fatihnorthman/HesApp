@@ -33,7 +33,7 @@ import com.ncorp.hesapp.data.model.BankAccount
  */
 @Database(
     entities = [Transaction::class, Contact::class, Product::class, BankAccount::class],
-    version = 7,
+    version = 8,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

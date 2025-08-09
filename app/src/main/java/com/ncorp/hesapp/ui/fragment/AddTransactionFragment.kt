@@ -18,6 +18,8 @@ import com.ncorp.hesapp.data.model.Contact
 import com.ncorp.hesapp.data.model.Product
 import com.ncorp.hesapp.data.model.TransactionType
 import com.ncorp.hesapp.data.model.Currency
+import com.ncorp.hesapp.data.model.getDisplayName
+import com.ncorp.hesapp.ui.viewmodel.AccountsViewModel
 import com.ncorp.hesapp.databinding.FragmentAddTransactionBinding
 import com.ncorp.hesapp.ui.viewmodel.AddTransactionViewModel
 import com.ncorp.hesapp.ui.viewmodel.ContactsViewModel
@@ -39,6 +41,7 @@ class AddTransactionFragment : Fragment() {
     private val viewModel: AddTransactionViewModel by viewModels()
     private val contactsViewModel: ContactsViewModel by viewModels()
     private val productsViewModel: ProductsViewModel by viewModels()
+    private val accountsViewModel: AccountsViewModel by viewModels()
     private val args: AddTransactionFragmentArgs by navArgs()
 
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -48,6 +51,8 @@ class AddTransactionFragment : Fragment() {
     private var productsList: List<Product> = emptyList()
     private var selectedProduct: Product? = null
     private var selectedCurrency: Currency = Currency.TRY
+    private var accountsList: List<com.ncorp.hesapp.data.model.BankAccount> = emptyList()
+    private var selectedAccountId: Long? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,6 +74,7 @@ class AddTransactionFragment : Fragment() {
         observeViewModel()
         observeContacts()
         observeProducts()
+        observeAccounts()
 
         // Dashboard'dan satış/alış hızlı aksiyonu ile gelindiyse ön seçim yap
         handlePreselectedFlow()
@@ -128,6 +134,7 @@ class AddTransactionFragment : Fragment() {
                 SoundUtils.playButtonClick()
                 binding.tilProduct.visibility = View.VISIBLE
                 binding.tilQuantity.visibility = View.VISIBLE
+                binding.tilAccount.visibility = View.VISIBLE
                 binding.chipIncome.isChecked = true // Satış => Gelir
                 // İlk seçimde ürün yoksa diyalogu aç
                 if (selectedProduct == null && productsList.isNotEmpty()) {
@@ -138,6 +145,7 @@ class AddTransactionFragment : Fragment() {
                 if (!binding.chipPurchase.isChecked) {
                     clearProductSelection()
                     syncProductSectionWithFlow()
+                    binding.tilAccount.visibility = View.GONE
                 }
             }
         }
@@ -146,6 +154,7 @@ class AddTransactionFragment : Fragment() {
                 SoundUtils.playButtonClick()
                 binding.tilProduct.visibility = View.VISIBLE
                 binding.tilQuantity.visibility = View.VISIBLE
+                binding.tilAccount.visibility = View.VISIBLE
                 binding.chipExpense.isChecked = true // Alış => Gider
                 // İlk seçimde ürün yoksa diyalogu aç
                 if (selectedProduct == null && productsList.isNotEmpty()) {
@@ -156,6 +165,7 @@ class AddTransactionFragment : Fragment() {
                 if (!binding.chipSale.isChecked) {
                     clearProductSelection()
                     syncProductSectionWithFlow()
+                    binding.tilAccount.visibility = View.GONE
                 }
             }
         }
@@ -182,6 +192,12 @@ class AddTransactionFragment : Fragment() {
             
             saveTransaction()
         }
+
+        // Hesap seçimi
+        binding.spinnerAccount.setOnItemClickListener { _, _, position, _ ->
+            val account = accountsList[position]
+            selectedAccountId = account.id
+        }
     }
 
     private fun observeContacts() {
@@ -198,6 +214,17 @@ class AddTransactionFragment : Fragment() {
                 productsList = list
                 // Eğer preselect bekliyorsak ve liste geldi ise diyalogu aç
                 maybeOpenProductDialogAfterPreselect()
+            }
+        }
+    }
+
+    private fun observeAccounts() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            accountsViewModel.accounts.collectLatest { list ->
+                accountsList = list
+                val items = list.map { "${it.accountName} (${it.accountType.getDisplayName()})" }
+                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items)
+                binding.spinnerAccount.setAdapter(adapter)
             }
         }
     }
@@ -396,7 +423,8 @@ class AddTransactionFragment : Fragment() {
                 notes = notes.ifEmpty { null },
                 contactId = selectedContact?.id,
                 productId = selectedProduct?.id,
-                quantity = parsedQuantity
+                quantity = parsedQuantity,
+                accountId = selectedAccountId
             )
         } catch (e: Exception) {
             ToastUtils.showErrorSnackbar(binding.root, "İşlem kaydedilirken hata oluştu: ${e.message}")

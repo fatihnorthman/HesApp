@@ -44,6 +44,7 @@ import java.util.Date
         Index(value = ["category"]),
         Index(value = ["contactId"]),
         Index(value = ["productId"]),
+        Index(value = ["parentTransactionId"]),
         Index(value = ["type", "date"])  // Composite index for common queries
     ]
 )
@@ -59,6 +60,7 @@ data class Transaction(
     val date: Date,
     val contactId: Long? = null,
     val productId: Long? = null,
+    val parentTransactionId: Long? = null,
     val notes: String? = null,
     val createdAt: Date = Date(),
     val updatedAt: Date = Date()

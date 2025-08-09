@@ -165,6 +165,22 @@ class TransactionRepository @Inject constructor(
         }
     }
 
+    suspend fun getTotalPaymentsForDebt(debtId: Long): Double {
+        return try {
+            transactionDao.getTotalPaymentsForDebt(debtId)
+        } catch (e: Exception) {
+            throw Exception("Borç ödemeleri alınırken hata oluştu: ${e.message}", e)
+        }
+    }
+
+    suspend fun getTotalCollectionsForReceivable(receivableId: Long): Double {
+        return try {
+            transactionDao.getTotalCollectionsForReceivable(receivableId)
+        } catch (e: Exception) {
+            throw Exception("Alacak tahsilatları alınırken hata oluştu: ${e.message}", e)
+        }
+    }
+
     /**
      * Toplam gelir
      */

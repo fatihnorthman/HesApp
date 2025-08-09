@@ -21,16 +21,18 @@ HesApp, kişisel ve iş hesap takibi için geliştirilmiş modern bir Android uy
 
 ### ✨ Özellikler
 
-- 💰 **Gelir/Gider Takibi** - Tüm finansal işlemlerinizi kategorize edin
-- 🏦 **Borç/Alacak Yönetimi** - Kişilerle olan finansal ilişkilerinizi takip edin
-- 📊 **Detaylı Raporlar** - Grafik ve istatistiklerle finansal durumunuzu analiz edin
-- 👥 **Kişi Yönetimi** - Müşteri, tedarikçi ve çalışan bilgilerinizi saklayın
-- 🔍 **Gelişmiş Arama** - İşlemlerinizi hızlıca bulun
-- 🎨 **Modern Arayüz** - Material Design 3 ile güzel ve kullanıcı dostu arayüz
-- 🌙 **Karanlık/Aydınlık Tema** - Gözünüzü yormayan tema seçenekleri
-- 📱 **Responsive Tasarım** - Tüm cihazlarda mükemmel görünüm
-- ⚡ **Yüksek Performans** - Optimize edilmiş kod yapısı
-- 🔒 **Güvenli Veri** - Yerel SQLite veritabanı ile güvenli depolama
+- 💰 **Gelir/Gider Takibi**: İşlemleri kategorize etme, arama ve filtreleme
+- 🧾 **Borç/Alacak Yönetimi**: Kişiye bağlı borç/alacak oluşturma ve takip
+- 💸 **Ödeme Yap / Tahsilat Al**: Mevcut borç/alacak işlemini seçerek parça parça ödeme/tahsilat ve kalan bakiyeyi düşme (link: `parentTransactionId`)
+- 🛒 **Satış/Alış (Ürün Entegrasyonu)**: Ürün seçimi ve miktar ile stok artır/azalt; satış/alışta ilgili hesabı seçerek bakiyeyi otomatik güncelleme
+- 🏦 **Hesaplar (Banka/Kasa)**: Hesap ekleme, listeleme, silme ve bakiye takibi; Dashboard toplamlarına dahil
+- 👥 **Kişiler**: Kişi türleri (Arkadaş, Aile, İş, Alıcı, Satıcı) ile kişi yönetimi ve işlemlerde seçim
+- 📦 **Ürünler**: Ürün tanımlama (ad, stok) ve satış/alış işlemleriyle bağlama
+- 📊 **Dashboard**: TL/USD/EUR bazında gelir-gider-borç-alacak; “Borç/Alacak Sonrası Net” ve hesap bakiyeleri dahil toplamlar; hızlı işlemler (Satış, Hesaplar, Ödeme, Tahsilat)
+- 🔔 **Geri Bildirim**: Tema uyumlu özel Toast & Snackbar, ses efektleri
+- 🚀 **Splash Ekranı**: Özel ikon ve yükleme göstergesi (Android SplashScreen API)
+- ⚙️ **Ayarlar**: Tema modu, ses aç/kapa, “Lite Mode” (animasyon kapatma)
+- 🎨 **Modern Arayüz**: Material Design 3, chip tabanlı işlem türü seçimi
 
 ## 🖼️ Ekran Görüntüleri
 
@@ -68,10 +70,10 @@ HesApp, kişisel ve iş hesap takibi için geliştirilmiş modern bir Android uy
 </div>
 
 ### 📱 **Ana Sayfa (Dashboard)**
-- **Finansal Özet Kartları** - Gelir, gider, borç, alacak toplamları
-- **İstatistik Kartları** - Toplam işlem ve kişi sayıları
-- **Hızlı İşlemler** - Kolay erişim butonları
-- **Modern Tasarım** - Material Design 3 ile şık arayüz
+- **Finansal Özet**: Çoklu para birimi (TL, USD, EUR) için Gelir, Gider, Borç, Alacak
+- **Net (B/A Sonrası)**: Net = Gelir - Gider; Net (B/A Sonrası) = Net - Borç + Alacak
+- **Hesap Bakiyeleri Dahil**: Tüm aktif hesap (banka/kasa) bakiyeleri TL net toplamına eklenir
+- **Hızlı İşlemler**: Satış, Hesaplar, Ödeme Yap, Tahsilat Al
 
 ### 💰 **İşlemler Sayfası**
 - **Arama ve Filtreleme** - Gelişmiş arama ve chip filtreleri
@@ -86,10 +88,11 @@ HesApp, kişisel ve iş hesap takibi için geliştirilmiş modern bir Android uy
 - **Modern Chip Tasarımı** - Görsel filtreleme
 
 ### ➕ **İşlem Ekleme Sayfası**
-- **İşlem Türü Seçimi** - Chip group ile görsel seçim
-- **Form Validasyonu** - Kapsamlı veri kontrolü
-- **Tarih Seçici** - Native DatePickerDialog
-- **Dinamik Form** - İşlem türüne göre alan görünürlüğü
+- **İşlem Türü**: Gelir, Gider, Borç, Alacak (chip grubu ile)
+- **Satış/Alış Akışı**: Ürün ve miktar seçimi; stok artır/azalt; hesap seçimi ile otomatik bakiye güncelleme
+- **Kişi Entegrasyonu**: Borç/Alacak işlemlerinde kişi seçimi
+- **Para Birimi/Tarih**: TRY, USD, EUR ve tarih seçimi
+- **Form Validasyonu**: Kapsamlı veri kontrolü ve kullanıcı geri bildirimi
 
 ### 🌙 **Karanlık Tema**
 - **Göz Dostu Tasarım** - Koyu arka plan ve açık metinler
@@ -100,10 +103,10 @@ HesApp, kişisel ve iş hesap takibi için geliştirilmiş modern bir Android uy
 ## 🛠️ Teknolojiler
 
 ### Backend & Veritabanı
-- **Room Database** - Yerel SQLite veritabanı
-- **Kotlin Coroutines** - Asenkron işlemler
-- **Flow** - Reaktif veri akışı
-- **Hilt** - Dependency injection
+- **Room (Entities)**: `Transaction` (parentTransactionId destekli), `Contact`, `Product`, `BankAccount`
+- **DAO/Repo**: Transaction, Contact, Product, BankAccount için Repository katmanı
+- **Kotlin Coroutines & Flow**: Asenkron ve reaktif veri akışları
+- **Hilt**: DI ile modüler ve test edilebilir yapı
 
 ### UI/UX
 - **Material Design 3** - Modern tasarım sistemi
@@ -113,10 +116,9 @@ HesApp, kişisel ve iş hesap takibi için geliştirilmiş modern bir Android uy
 - **Animasyonlar** - Yumuşak geçişler ve efektler
 
 ### Mimari
-- **MVVM** - Model-View-ViewModel mimarisi
-- **Repository Pattern** - Veri erişim katmanı
-- **Clean Architecture** - Temiz kod yapısı
-- **SOLID Principles** - Yazılım geliştirme prensipleri
+- **MVVM + Repository**: Temiz katman ayrımı
+- **Navigation Component (Safe Args)**: Tip güvenli yönlendirme
+- **TypeConverters**: `Currency`, `AccountType` için Room dönüştürücüleri
 
 ## 📱 Kurulum
 
@@ -135,9 +137,7 @@ cd hesapp
 ```
 
 2. **Projeyi Android Studio'da açın**
-```bash
-android-studio hesapp
-```
+Android Studio'yu açın ve `File > Open` ile proje klasörünü seçin.
 
 3. **Bağımlılıkları senkronize edin**
 ```bash
@@ -184,11 +184,9 @@ app/
 - **Hızlı Erişim** - Sık kullanılan fonksiyonlar
 
 ### 💰 İşlemler
-- **CRUD İşlemleri** - Ekleme, düzenleme, silme, görüntüleme
-- **Filtreleme** - Tür, tarih, kategori bazında filtreleme
-- **Arama** - Açıklama ve kategori araması
-- **Kategoriler** - Gelir, Gider, Borç, Alacak
-- **Tarih Takibi** - İşlem tarihleri ve geçmiş
+- **CRUD**: Ekle, düzenle, sil
+- **Filtreleme/Arama**: Tür/tarih/kategori ve metin araması
+- **Ödeme/Tahsilat**: Mevcut Borç/Alacak işlemine bağlanarak parça parça düşme (parent-child ilişkisi)
 
 ### 👥 Kişiler
 - **Kişi Yönetimi** - Müşteri, tedarikçi, çalışan kayıtları
@@ -197,16 +195,10 @@ app/
 - **Kategoriler** - Kişi türüne göre sınıflandırma
 
 ### 📈 Raporlar
-- **Gelir/Gider Analizi** - Aylık karşılaştırmalar
-- **Kategori Raporları** - Harcama dağılımları
-- **Trend Analizi** - Zaman bazlı grafikler
-- **Export** - PDF/Excel rapor çıktısı
+- (Geliştiriliyor) İleri seviye grafikler ve dışa aktarma
 
 ### ⚙️ Ayarlar
-- **Tema Seçimi** - Aydınlık/Karanlık tema
-- **Para Birimi** - TL, USD, EUR desteği
-- **Yedekleme** - Veri yedekleme ve geri yükleme
-- **Bildirimler** - Hatırlatma ve uyarılar
+- Tema modu (Açık/Koyu), Ses, Lite Mode (animasyon kapalı)
 
 ## 🎨 Tasarım Sistemi
 
@@ -252,9 +244,7 @@ app/
 ```
 
 ### Test Coverage
-```bash
-./gradlew jacocoTestReport
-```
+Opsiyonel olarak Jacoco yapılandırılabilir.
 
 ## 📦 Release
 

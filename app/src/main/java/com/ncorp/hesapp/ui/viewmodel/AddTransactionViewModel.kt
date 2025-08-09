@@ -22,6 +22,7 @@ import com.ncorp.hesapp.data.model.Transaction
 import com.ncorp.hesapp.data.model.TransactionType
 import com.ncorp.hesapp.data.model.Currency
 import com.ncorp.hesapp.data.repository.ProductRepository
+import com.ncorp.hesapp.data.repository.BankAccountRepository
 import com.ncorp.hesapp.data.repository.TransactionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -31,7 +32,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AddTransactionViewModel @Inject constructor(
     private val transactionRepository: TransactionRepository,
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val bankAccountRepository: BankAccountRepository
 ) : ViewModel() {
 
     private val _uiState = MutableLiveData<AddTransactionUiState>(AddTransactionUiState.Idle)
@@ -47,7 +49,8 @@ class AddTransactionViewModel @Inject constructor(
         notes: String?,
         contactId: Long? = null,
         productId: Long? = null,
-        quantity: Int? = null
+        quantity: Int? = null,
+        accountId: Long? = null
     ) {
         viewModelScope.launch {
             try {
@@ -87,6 +90,28 @@ class AddTransactionViewModel @Inject constructor(
                 val transactionId = transactionRepository.addTransaction(transaction)
                 
                 if (transactionId > 0) {
+                    // Hesap bakiyesi güncelle
+                    if (accountId != null) {
+                        val account = bankAccountRepository.getAccountById(accountId)
+                            ?: run {
+                                _uiState.value = AddTransactionUiState.Error("Seçilen hesap bulunamadı")
+                                return@launch
+                            }
+
+                        val newBalance = when (type) {
+                            TransactionType.INCOME -> account.balance + amount // Satış
+                            TransactionType.EXPENSE -> {
+                                val candidate = account.balance - amount // Alış
+                                if (candidate < 0) {
+                                    _uiState.value = AddTransactionUiState.Error("Yetersiz bakiye")
+                                    return@launch
+                                }
+                                candidate
+                            }
+                            else -> account.balance
+                        }
+                        bankAccountRepository.updateBalance(account.id, newBalance)
+                    }
                     _uiState.value = AddTransactionUiState.Success
                 } else {
                     _uiState.value = AddTransactionUiState.Error("İşlem eklenirken hata oluştu")
