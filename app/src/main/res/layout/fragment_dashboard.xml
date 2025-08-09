@@ -103,10 +103,49 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAccounts"
+                            style="@style/Widget.HesApp.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:layout_height="wrap_content"
+                            android:text="Hesaplar"
+                            app:icon="@drawable/ic_account" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPayment"
+                            style="@style/Widget.HesApp.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:layout_height="wrap_content"
+                            android:text="Ödeme Yap"
+                            app:icon="@drawable/ic_debt" />
+                    </LinearLayout>
+
+                    <!-- 4. Satır -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnCollection"
+                            style="@style/Widget.HesApp.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:layout_height="wrap_content"
+                            android:text="Tahsilat Al"
+                            app:icon="@drawable/ic_receivable" />
+
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnViewReports"
                             style="@style/Widget.HesApp.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_weight="1"
+                            android:layout_marginStart="8dp"
                             android:layout_height="wrap_content"
                             android:text="Raporlar"
                             app:icon="@drawable/ic_reports" />
@@ -255,15 +294,6 @@
                         android:text="0 ₺"
                         android:textAppearance="?attr/textAppearanceTitleLarge"
                         android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/tvNetAmountAfterDebt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Borç/Alacak Sonrası Net: 0 ₺"
-                        android:textAppearance="?attr/textAppearanceBodyMedium"
-                            android:textColor="@android:color/white"
-                        android:textStyle="bold" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -344,6 +374,39 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
+
+            <!-- Borç/Alacak Sonrası Net Durum Kartı -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/gradient_net"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Borç/Alacak Sonrası Net Durum"
+                        android:textAppearance="?attr/textAppearanceLabelSmall"
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:id="@+id/tvNetAmountAfterDebt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="0 ₺"
+                        android:textAppearance="?attr/textAppearanceTitleLarge"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- İstatistik Kartları -->
             <LinearLayout

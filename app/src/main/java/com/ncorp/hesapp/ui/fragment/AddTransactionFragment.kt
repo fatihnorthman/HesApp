@@ -17,6 +17,7 @@ import com.ncorp.hesapp.R
 import com.ncorp.hesapp.data.model.Contact
 import com.ncorp.hesapp.data.model.Product
 import com.ncorp.hesapp.data.model.TransactionType
+import com.ncorp.hesapp.data.model.Currency
 import com.ncorp.hesapp.databinding.FragmentAddTransactionBinding
 import com.ncorp.hesapp.ui.viewmodel.AddTransactionViewModel
 import com.ncorp.hesapp.ui.viewmodel.ContactsViewModel
@@ -46,6 +47,7 @@ class AddTransactionFragment : Fragment() {
     private var contactsList: List<Contact> = emptyList()
     private var productsList: List<Product> = emptyList()
     private var selectedProduct: Product? = null
+    private var selectedCurrency: Currency = Currency.TRY
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,6 +76,19 @@ class AddTransactionFragment : Fragment() {
 
     private fun setupViews() {
         binding.etDate.setText(dateFormat.format(selectedDate))
+        setupCurrencySpinner()
+    }
+    
+    private fun setupCurrencySpinner() {
+        val currencyItems = Currency.values().map { "${it.symbol} ${it.code}" }
+        val currencyAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, currencyItems)
+        binding.spinnerCurrency.setAdapter(currencyAdapter)
+        binding.spinnerCurrency.setText("₺ TRY", false)
+        
+        binding.spinnerCurrency.setOnItemClickListener { _, _, position, _ ->
+            selectedCurrency = Currency.values()[position]
+            SoundUtils.playButtonClick()
+        }
     }
 
     private fun setupListeners() {
@@ -300,78 +315,92 @@ class AddTransactionFragment : Fragment() {
     }
 
     private fun saveTransaction() {
-        val description = binding.etDescription.text.toString().trim()
-        val category = binding.etCategory.text.toString().trim()
-        val amountText = binding.etAmount.text.toString().trim()
-        val notes = binding.etNotes.text.toString().trim()
-        val quantityText = binding.etQuantity.text?.toString()?.trim()
+        try {
+            val description = binding.etDescription.text.toString().trim()
+            val category = binding.etCategory.text.toString().trim()
+            val amountText = binding.etAmount.text.toString().trim()
+            val notes = binding.etNotes.text.toString().trim()
+            val quantityText = binding.etQuantity.text?.toString()?.trim()
 
-        if (description.isEmpty()) {
-            binding.tilDescription.error = "Açıklama gerekli"
-            return
-        }
-        if (category.isEmpty()) {
-            binding.tilCategory.error = "Kategori gerekli"
-            return
-        }
-        if (amountText.isEmpty()) {
-            binding.tilAmount.error = "Tutar gerekli"
-            return
-        }
-        val amount = amountText.toDoubleOrNull()
-        if (amount == null || amount <= 0) {
-            binding.tilAmount.error = "Geçersiz tutar"
-            return
-        }
-
-        val selectedChipId = binding.chipGroupTransactionType.checkedChipId
-        val transactionType = when (selectedChipId) {
-            R.id.chipIncome -> TransactionType.INCOME
-            R.id.chipExpense -> TransactionType.EXPENSE
-            R.id.chipDebt -> TransactionType.DEBT
-            R.id.chipReceivable -> TransactionType.RECEIVABLE
-            else -> {
-                ToastUtils.showCustomToast(requireContext(), "İşlem türü seçin")
+            if (description.isEmpty()) {
+                binding.tilDescription.error = "Açıklama gerekli"
                 return
             }
+            if (category.isEmpty()) {
+                binding.tilCategory.error = "Kategori gerekli"
+                return
+            }
+            if (amountText.isEmpty()) {
+                binding.tilAmount.error = "Tutar gerekli"
+                return
+            }
+            val amount = try {
+                amountText.toDoubleOrNull()
+            } catch (e: NumberFormatException) {
+                null
+            }
+            if (amount == null || amount <= 0) {
+                binding.tilAmount.error = "Geçersiz tutar"
+                return
+            }
+
+            val selectedChipId = binding.chipGroupTransactionType.checkedChipId
+            val transactionType = when (selectedChipId) {
+                R.id.chipIncome -> TransactionType.INCOME
+                R.id.chipExpense -> TransactionType.EXPENSE
+                R.id.chipDebt -> TransactionType.DEBT
+                R.id.chipReceivable -> TransactionType.RECEIVABLE
+                else -> {
+                    ToastUtils.showErrorSnackbar(binding.root, "İşlem türü seçin")
+                    return
+                }
+            }
+
+            val isSale = binding.chipSale.isChecked
+            val isPurchase = binding.chipPurchase.isChecked
+            var parsedQuantity: Int? = null
+
+            if (isSale || isPurchase) {
+                if (selectedProduct == null) {
+                    ToastUtils.showErrorSnackbar(binding.root, "Ürün seçin")
+                    return
+                }
+                if (quantityText.isNullOrEmpty()) {
+                    binding.tilQuantity.error = "Miktar gerekli"
+                    return
+                }
+                parsedQuantity = try {
+                    quantityText.toIntOrNull()
+                } catch (e: NumberFormatException) {
+                    null
+                }
+                if (parsedQuantity == null || parsedQuantity <= 0) {
+                    binding.tilQuantity.error = "Geçersiz miktar"
+                    return
+                }
+            }
+
+            // Hata mesajlarını temizle
+            binding.tilDescription.error = null
+            binding.tilCategory.error = null
+            binding.tilAmount.error = null
+            binding.tilQuantity.error = null
+
+            viewModel.addTransaction(
+                type = transactionType,
+                description = description,
+                category = category,
+                amount = amount,
+                currency = selectedCurrency,
+                date = selectedDate,
+                notes = notes.ifEmpty { null },
+                contactId = selectedContact?.id,
+                productId = selectedProduct?.id,
+                quantity = parsedQuantity
+            )
+        } catch (e: Exception) {
+            ToastUtils.showErrorSnackbar(binding.root, "İşlem kaydedilirken hata oluştu: ${e.message}")
         }
-
-        val isSale = binding.chipSale.isChecked
-        val isPurchase = binding.chipPurchase.isChecked
-        var parsedQuantity: Int? = null
-
-        if (isSale || isPurchase) {
-            if (selectedProduct == null) {
-                ToastUtils.showCustomToast(requireContext(), "Ürün seçin")
-                return
-            }
-            if (quantityText.isNullOrEmpty()) {
-                binding.tilQuantity.error = "Miktar gerekli"
-                return
-            }
-            parsedQuantity = quantityText.toIntOrNull()
-            if (parsedQuantity == null || parsedQuantity <= 0) {
-                binding.tilQuantity.error = "Geçersiz miktar"
-                return
-            }
-        }
-
-        binding.tilDescription.error = null
-        binding.tilCategory.error = null
-        binding.tilAmount.error = null
-        binding.tilQuantity.error = null
-
-        viewModel.addTransaction(
-            type = transactionType,
-            description = description,
-            category = category,
-            amount = amount,
-            date = selectedDate,
-            notes = notes.ifEmpty { null },
-            contactId = selectedContact?.id,
-            productId = selectedProduct?.id,
-            quantity = parsedQuantity
-        )
     }
 
     private fun clearForm() {

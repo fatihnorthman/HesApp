@@ -113,6 +113,36 @@ interface TransactionDao {
     fun getNetAmount(): Flow<Double?>
 
     /**
+     * Para birimine göre toplam gelir hesapla
+     */
+    @Query("SELECT SUM(amount) FROM transactions WHERE type = 'INCOME' AND currency = :currency")
+    fun getTotalIncomeByCurrency(currency: String): Flow<Double?>
+
+    /**
+     * Para birimine göre toplam gider hesapla
+     */
+    @Query("SELECT SUM(amount) FROM transactions WHERE type = 'EXPENSE' AND currency = :currency")
+    fun getTotalExpenseByCurrency(currency: String): Flow<Double?>
+
+    /**
+     * Para birimine göre toplam borç hesapla
+     */
+    @Query("SELECT SUM(amount) FROM transactions WHERE type = 'DEBT' AND currency = :currency")
+    fun getTotalDebtByCurrency(currency: String): Flow<Double?>
+
+    /**
+     * Para birimine göre toplam alacak hesapla
+     */
+    @Query("SELECT SUM(amount) FROM transactions WHERE type = 'RECEIVABLE' AND currency = :currency")
+    fun getTotalReceivableByCurrency(currency: String): Flow<Double?>
+
+    /**
+     * Para birimine göre net durum hesapla
+     */
+    @Query("SELECT (SELECT COALESCE(SUM(amount), 0) FROM transactions WHERE type = 'INCOME' AND currency = :currency) - (SELECT COALESCE(SUM(amount), 0) FROM transactions WHERE type = 'EXPENSE' AND currency = :currency)")
+    fun getNetAmountByCurrency(currency: String): Flow<Double?>
+
+    /**
      * Kategoriye göre grupla
      */
     @Query("SELECT category, SUM(amount) as total FROM transactions GROUP BY category ORDER BY total DESC")

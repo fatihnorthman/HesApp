@@ -16,6 +16,8 @@ package com.ncorp.hesapp.data.converter
 
 import androidx.room.TypeConverter
 import com.ncorp.hesapp.data.model.TransactionType
+import com.ncorp.hesapp.data.model.Currency
+import com.ncorp.hesapp.data.model.AccountType
 import java.util.Date
 
 /**
@@ -60,5 +62,37 @@ class Converters {
     @TypeConverter
     fun toTransactionType(value: String?): TransactionType? {
         return value?.let { TransactionType.valueOf(it) }
+    }
+
+    /**
+     * Currency'i String'e dönüştür
+     */
+    @TypeConverter
+    fun fromCurrency(currency: Currency?): String? {
+        return currency?.name
+    }
+
+    /**
+     * String'i Currency'e dönüştür
+     */
+    @TypeConverter
+    fun toCurrency(value: String?): Currency? {
+        return value?.let { Currency.valueOf(it) }
+    }
+
+    /**
+     * AccountType'i String'e dönüştür
+     */
+    @TypeConverter
+    fun fromAccountType(accountType: AccountType?): String? {
+        return accountType?.name
+    }
+
+    /**
+     * String'i AccountType'e dönüştür
+     */
+    @TypeConverter
+    fun toAccountType(value: String?): AccountType? {
+        return value?.let { AccountType.valueOf(it) }
     }
 } 

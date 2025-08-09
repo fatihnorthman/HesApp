@@ -55,6 +55,7 @@ data class Transaction(
     val description: String,
     val category: String,
     val amount: Double,
+    val currency: Currency = Currency.TRY,
     val date: Date,
     val contactId: Long? = null,
     val productId: Long? = null,
@@ -69,10 +70,12 @@ data class Transaction(
  * İşlem türlerini tanımlar.
  */
 enum class TransactionType {
-    INCOME,     // Gelir
-    EXPENSE,    // Gider
-    DEBT,       // Borç
-    RECEIVABLE  // Alacak
+    INCOME,         // Gelir
+    EXPENSE,        // Gider
+    DEBT,           // Borç
+    RECEIVABLE,     // Alacak
+    DEBT_PAYMENT,   // Borç Ödeme
+    RECEIVABLE_COLLECTION  // Tahsilat
 }
 
 /**
@@ -86,6 +89,8 @@ fun TransactionType.getDisplayName(): String {
         TransactionType.EXPENSE -> "Gider"
         TransactionType.DEBT -> "Borç"
         TransactionType.RECEIVABLE -> "Alacak"
+        TransactionType.DEBT_PAYMENT -> "Borç Ödeme"
+        TransactionType.RECEIVABLE_COLLECTION -> "Tahsilat"
     }
 }
 
@@ -95,6 +100,8 @@ fun TransactionType.getColorRes(): Int {
         TransactionType.EXPENSE -> android.R.color.holo_red_light
         TransactionType.DEBT -> android.R.color.holo_orange_light
         TransactionType.RECEIVABLE -> android.R.color.holo_blue_light
+        TransactionType.DEBT_PAYMENT -> android.R.color.holo_orange_light
+        TransactionType.RECEIVABLE_COLLECTION -> android.R.color.holo_blue_light
     }
 }
 
@@ -104,5 +111,7 @@ fun TransactionType.getGradientRes(): Int {
         TransactionType.EXPENSE -> com.ncorp.hesapp.R.drawable.gradient_expense
         TransactionType.DEBT -> com.ncorp.hesapp.R.drawable.gradient_debt
         TransactionType.RECEIVABLE -> com.ncorp.hesapp.R.drawable.gradient_receivable
+        TransactionType.DEBT_PAYMENT -> com.ncorp.hesapp.R.drawable.gradient_debt
+        TransactionType.RECEIVABLE_COLLECTION -> com.ncorp.hesapp.R.drawable.gradient_receivable
     }
 } 

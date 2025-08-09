@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ncorp.hesapp.data.model.Transaction
 import com.ncorp.hesapp.data.model.TransactionType
+import com.ncorp.hesapp.data.model.Currency
 import com.ncorp.hesapp.data.repository.ProductRepository
 import com.ncorp.hesapp.data.repository.TransactionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,6 +42,7 @@ class AddTransactionViewModel @Inject constructor(
         description: String,
         category: String,
         amount: Double,
+        currency: Currency,
         date: Date,
         notes: String?,
         contactId: Long? = null,
@@ -75,6 +77,7 @@ class AddTransactionViewModel @Inject constructor(
                     description = description,
                     category = category,
                     amount = amount,
+                    currency = currency,
                     date = date,
                     notes = notes,
                     contactId = contactId,

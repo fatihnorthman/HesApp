@@ -5,8 +5,10 @@ import com.ncorp.hesapp.data.database.AppDatabase
 import com.ncorp.hesapp.data.dao.ContactDao
 import com.ncorp.hesapp.data.dao.TransactionDao
 import com.ncorp.hesapp.data.dao.ProductDao
+import com.ncorp.hesapp.data.dao.BankAccountDao
 import com.ncorp.hesapp.data.repository.ContactRepository
 import com.ncorp.hesapp.data.repository.ProductRepository
+import com.ncorp.hesapp.data.repository.BankAccountRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -67,4 +69,10 @@ object DatabaseModule {
 
     @Provides
     fun provideProductRepository(productDao: ProductDao): ProductRepository = ProductRepository(productDao)
+
+    @Provides
+    fun provideBankAccountDao(appDatabase: AppDatabase): BankAccountDao = appDatabase.bankAccountDao()
+
+    @Provides
+    fun provideBankAccountRepository(bankAccountDao: BankAccountDao): BankAccountRepository = BankAccountRepository(bankAccountDao)
 } 

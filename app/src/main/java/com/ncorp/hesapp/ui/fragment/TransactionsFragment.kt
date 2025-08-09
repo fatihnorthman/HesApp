@@ -63,8 +63,12 @@ class TransactionsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         // Fragment giriş animasyonu
-        val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
-        view.startAnimation(fadeInAnimation)
+        val lite = requireContext().getSharedPreferences("settings", android.content.Context.MODE_PRIVATE)
+            .getBoolean("lite_mode", false)
+        if (!lite) {
+            val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+            view.startAnimation(fadeInAnimation)
+        }
         
         setupUI()
         setupObservers()
@@ -200,6 +204,7 @@ class TransactionsFragment : Fragment() {
             // FAB animasyonu
             val scaleAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.button_scale)
             binding.fabAddTransaction.startAnimation(scaleAnimation)
+            com.ncorp.hesapp.utils.SoundUtils.playButtonClick()
             
             findNavController().navigate(R.id.action_transactions_to_addTransaction)
         }

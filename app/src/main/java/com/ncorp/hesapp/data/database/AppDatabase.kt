@@ -9,9 +9,11 @@ import com.ncorp.hesapp.data.converter.Converters
 import com.ncorp.hesapp.data.dao.TransactionDao
 import com.ncorp.hesapp.data.dao.ContactDao
 import com.ncorp.hesapp.data.dao.ProductDao
+import com.ncorp.hesapp.data.dao.BankAccountDao
 import com.ncorp.hesapp.data.model.Transaction
 import com.ncorp.hesapp.data.model.Contact
 import com.ncorp.hesapp.data.model.Product
+import com.ncorp.hesapp.data.model.BankAccount
 
 /*
  * AppDatabase.kt
@@ -30,8 +32,8 @@ import com.ncorp.hesapp.data.model.Product
  * Kodun her adımı, "neden böyle yapıldı?" ve "ne işe yarar?" sorularına cevap verecek şekilde açıklanmıştır.
  */
 @Database(
-    entities = [Transaction::class, Contact::class, Product::class],
-    version = 4,
+    entities = [Transaction::class, Contact::class, Product::class, BankAccount::class],
+    version = 7,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -51,6 +53,11 @@ abstract class AppDatabase : RoomDatabase() {
      * Product DAO
      */
     abstract fun productDao(): ProductDao
+
+    /**
+     * BankAccount DAO
+     */
+    abstract fun bankAccountDao(): BankAccountDao
 
     companion object {
         @Volatile

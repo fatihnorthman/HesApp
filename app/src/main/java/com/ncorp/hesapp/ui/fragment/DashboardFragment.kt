@@ -15,6 +15,8 @@ import com.ncorp.hesapp.ui.viewmodel.DashboardViewModel
 import com.ncorp.hesapp.utils.ToastUtils
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import android.animation.ObjectAnimator
+import android.view.animation.DecelerateInterpolator
 
 /*
  * DashboardFragment.kt
@@ -57,8 +59,12 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         // Fragment giriş animasyonu
-        val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
-        view.startAnimation(fadeInAnimation)
+        val lite = requireContext().getSharedPreferences("settings", android.content.Context.MODE_PRIVATE)
+            .getBoolean("lite_mode", false)
+        if (!lite) {
+            val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+            view.startAnimation(fadeInAnimation)
+        }
         
         // UI'ı yapılandır
         setupUI()
@@ -79,6 +85,9 @@ class DashboardFragment : Fragment() {
         
         // Swipe refresh layout'u ayarla
         setupSwipeRefresh()
+
+        // Kartlara tıklayınca büyütme animasyonu
+        attachCardPopAnimation()
     }
 
     /**
@@ -104,6 +113,24 @@ class DashboardFragment : Fragment() {
             binding.btnAddContact.startAnimation(scaleAnimation)
             findNavController().navigate(R.id.action_dashboard_to_contacts)
         }
+        binding.btnAccounts.setOnClickListener {
+            val scaleAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.button_scale)
+            binding.btnAccounts.startAnimation(scaleAnimation)
+            findNavController().navigate(R.id.action_dashboard_to_accounts)
+        }
+
+        binding.btnPayment.setOnClickListener {
+            val scaleAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.button_scale)
+            binding.btnPayment.startAnimation(scaleAnimation)
+            findNavController().navigate(R.id.action_dashboard_to_payment)
+        }
+
+        binding.btnCollection.setOnClickListener {
+            val scaleAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.button_scale)
+            binding.btnCollection.startAnimation(scaleAnimation)
+            findNavController().navigate(R.id.action_dashboard_to_collection)
+        }
+
         binding.btnViewReports.setOnClickListener {
             val scaleAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.button_scale)
             binding.btnViewReports.startAnimation(scaleAnimation)
@@ -146,29 +173,103 @@ class DashboardFragment : Fragment() {
         viewModel.error.observe(viewLifecycleOwner) { it?.let { ToastUtils.showErrorSnackbar(binding.root, it); viewModel.clearError() } }
     }
 
+    private fun attachCardPopAnimation() {
+        val cards = listOf(
+            binding.root.findViewById<View>(R.id.tvTotalIncome)?.parent?.parent as? View,
+            binding.root.findViewById<View>(R.id.tvTotalExpense)?.parent?.parent as? View,
+            binding.root.findViewById<View>(R.id.tvNetAmount)?.parent?.parent?.parent as? View,
+            binding.root.findViewById<View>(R.id.tvTotalDebt)?.parent?.parent as? View,
+            binding.root.findViewById<View>(R.id.tvTotalReceivable)?.parent?.parent as? View
+        ).filterNotNull()
+
+        cards.forEach { card ->
+            card.isClickable = true
+            card.setOnClickListener {
+                val lite = requireContext().getSharedPreferences("settings", android.content.Context.MODE_PRIVATE)
+                    .getBoolean("lite_mode", false)
+                if (lite) return@setOnClickListener
+                val scaleUpX = ObjectAnimator.ofFloat(card, View.SCALE_X, 1f, 1.04f)
+                val scaleUpY = ObjectAnimator.ofFloat(card, View.SCALE_Y, 1f, 1.04f)
+                val scaleDownX = ObjectAnimator.ofFloat(card, View.SCALE_X, 1.04f, 1f)
+                val scaleDownY = ObjectAnimator.ofFloat(card, View.SCALE_Y, 1.04f, 1f)
+                listOf(scaleUpX, scaleUpY, scaleDownX, scaleDownY).forEach { anim ->
+                    anim.duration = 120
+                    anim.interpolator = DecelerateInterpolator()
+                }
+                scaleUpX.start(); scaleUpY.start()
+                card.postDelayed({ scaleDownX.start(); scaleDownY.start() }, 120)
+            }
+        }
+    }
+
     /**
      * Dashboard UI'ını günceller
      * 
      * Bu metod, ViewModel'den gelen verileri kullanarak UI'ı günceller.
      */
     private fun updateDashboardUI(data: DashboardViewModel.DashboardData) {
-        // Toplam gelir
-        binding.tvTotalIncome.text = data.totalIncome
+        // Para birimlerine göre verileri göster
+        val currencyTexts = mutableListOf<String>()
         
-        // Toplam gider
-        binding.tvTotalExpense.text = data.totalExpense
+        data.currencyData.forEach { (currency, currencyData) ->
+            if (currencyData.totalIncome != 0.0 || currencyData.totalExpense != 0.0 || 
+                currencyData.totalDebt != 0.0 || currencyData.totalReceivable != 0.0) {
+                
+                val symbol = currency.symbol
+                currencyTexts.add(buildString {
+                    append("${currency.displayName}:\n")
+                    append("Gelir: ${symbol}${String.format("%.2f", currencyData.totalIncome)}\n")
+                    append("Gider: ${symbol}${String.format("%.2f", currencyData.totalExpense)}\n")
+                    append("Net: ${symbol}${String.format("%.2f", currencyData.netAmount)}\n")
+                    if (currencyData.totalDebt != 0.0 || currencyData.totalReceivable != 0.0) {
+                        append("Borç: ${symbol}${String.format("%.2f", currencyData.totalDebt)}\n")
+                        append("Alacak: ${symbol}${String.format("%.2f", currencyData.totalReceivable)}\n")
+                        append("Net (B/A Sonrası): ${symbol}${String.format("%.2f", currencyData.netAmountAfterDebt)}")
+                    }
+                })
+            }
+        }
         
-        // Net durum
-        binding.tvNetAmount.text = data.netAmount
+        // Toplu metin gösterimi
+        val tlData = data.currencyData[com.ncorp.hesapp.data.model.Currency.TRY] ?: DashboardViewModel.CurrencyData(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        val usdData = data.currencyData[com.ncorp.hesapp.data.model.Currency.USD] ?: DashboardViewModel.CurrencyData(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        val eurData = data.currencyData[com.ncorp.hesapp.data.model.Currency.EUR] ?: DashboardViewModel.CurrencyData(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         
-        // Borç/Alacak sonrası net durum
-        binding.tvNetAmountAfterDebt.text = "Borç/Alacak Sonrası Net: ${data.netAmountAfterDebt}"
+        binding.tvTotalIncome.text = buildString {
+            append("₺${String.format("%.2f", tlData.totalIncome)}")
+            append("\n$${String.format("%.2f", usdData.totalIncome)}")
+            append("\n€${String.format("%.2f", eurData.totalIncome)}")
+        }
         
-        // Toplam borç
-        binding.tvTotalDebt.text = data.totalDebt
+        binding.tvTotalExpense.text = buildString {
+            append("₺${String.format("%.2f", tlData.totalExpense)}")
+            append("\n$${String.format("%.2f", usdData.totalExpense)}")
+            append("\n€${String.format("%.2f", eurData.totalExpense)}")
+        }
         
-        // Toplam alacak
-        binding.tvTotalReceivable.text = data.totalReceivable
+        binding.tvNetAmount.text = buildString {
+            append("₺${String.format("%.2f", tlData.netAmount)}")
+            append("\n$${String.format("%.2f", usdData.netAmount)}")
+            append("\n€${String.format("%.2f", eurData.netAmount)}")
+        }
+        
+        binding.tvTotalDebt.text = buildString {
+            append("₺${String.format("%.2f", tlData.totalDebt)}")
+            append("\n$${String.format("%.2f", usdData.totalDebt)}")
+            append("\n€${String.format("%.2f", eurData.totalDebt)}")
+        }
+        
+        binding.tvTotalReceivable.text = buildString {
+            append("₺${String.format("%.2f", tlData.totalReceivable)}")
+            append("\n$${String.format("%.2f", usdData.totalReceivable)}")
+            append("\n€${String.format("%.2f", eurData.totalReceivable)}")
+        }
+        
+        binding.tvNetAmountAfterDebt.text = buildString {
+            append("₺${String.format("%.2f", tlData.netAmountAfterDebt)}")
+            append("\n$${String.format("%.2f", usdData.netAmountAfterDebt)}")
+            append("\n€${String.format("%.2f", eurData.netAmountAfterDebt)}")
+        }
         
         // Son işlemler sayısı
         binding.tvRecentTransactions.text = data.recentTransactions
@@ -179,9 +280,9 @@ class DashboardFragment : Fragment() {
         // Toplam kişi sayısı
         binding.tvTotalContacts.text = data.totalContacts
 
-        // Net durum rengini ayarla
-        updateNetAmountColor(data.rawNetAmount)
-        updateNetAmountAfterDebtColor(data.rawNetAmountAfterDebt)
+        // Net durum rengini ayarla (sadece TL için)
+        updateNetAmountColor(tlData.netAmount)
+        updateNetAmountAfterDebtColor(tlData.netAmountAfterDebt)
     }
 
     private fun updateNetAmountAfterDebtColor(netAmountAfterDebt: Double) {

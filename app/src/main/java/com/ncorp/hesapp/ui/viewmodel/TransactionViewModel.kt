@@ -77,6 +77,7 @@ class TransactionViewModel @Inject constructor(
      */
     private fun setupFiltering() {
         viewModelScope.launch {
+            try {
             combine(
                 _transactions,
                 _selectedFilter,
@@ -109,7 +110,13 @@ class TransactionViewModel @Inject constructor(
             .collect { filteredTransactions ->
                 _uiState.value = _uiState.value.copy(
                     transactions = filteredTransactions,
-                    isEmpty = filteredTransactions.isEmpty()
+                    isEmpty = filteredTransactions.isEmpty(),
+                    error = null
+                )
+            }
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    error = "Filtreleme sırasında hata oluştu: ${e.message}"
                 )
             }
         }
@@ -126,7 +133,13 @@ class TransactionViewModel @Inject constructor(
      * Arama sorgusu değiştir
      */
     fun setSearchQuery(query: String) {
-        _searchQuery.value = query
+        try {
+            _searchQuery.value = query
+        } catch (e: Exception) {
+            _uiState.value = _uiState.value.copy(
+                error = "Arama yapılırken hata oluştu: ${e.message}"
+            )
+        }
     }
 
     /**

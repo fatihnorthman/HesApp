@@ -51,6 +51,30 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_down" />
+            
+        <action
+            android:id="@+id/action_dashboard_to_accounts"
+            app:destination="@id/accountsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+            
+        <action
+            android:id="@+id/action_dashboard_to_payment"
+            app:destination="@id/paymentFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_down" />
+            
+        <action
+            android:id="@+id/action_dashboard_to_collection"
+            app:destination="@id/collectionFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_down" />
     </fragment>
 
     <!-- Transactions Fragment - İşlemler -->
@@ -123,6 +147,27 @@
         android:name="com.ncorp.hesapp.ui.fragment.ProductsFragment"
         android:label="@string/products"
         tools:layout="@layout/fragment_products" />
+
+    <!-- Accounts Fragment - Hesaplar -->
+    <fragment
+        android:id="@+id/accountsFragment"
+        android:name="com.ncorp.hesapp.ui.fragment.AccountsFragment"
+        android:label="Hesaplar"
+        tools:layout="@layout/fragment_accounts" />
+
+    <!-- Payment Fragment - Borç Ödeme -->
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.ncorp.hesapp.ui.fragment.PaymentFragment"
+        android:label="Borç Ödeme"
+        tools:layout="@layout/fragment_payment" />
+
+    <!-- Collection Fragment - Alacak Tahsilatı -->
+    <fragment
+        android:id="@+id/collectionFragment"
+        android:name="com.ncorp.hesapp.ui.fragment.CollectionFragment"
+        android:label="Alacak Tahsilatı"
+        tools:layout="@layout/fragment_payment" />
 
     <!-- Settings Fragment - Ayarlar -->
     <fragment

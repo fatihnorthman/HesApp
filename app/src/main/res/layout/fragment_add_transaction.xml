@@ -157,28 +157,61 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Tutar -->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilAmount"
+                    <!-- Para Birimi ve Tutar -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        android:hint="@string/amount"
-                        app:boxCornerRadiusBottomEnd="8dp"
-                        app:boxCornerRadiusBottomStart="8dp"
-                        app:boxCornerRadiusTopEnd="8dp"
-                        app:boxCornerRadiusTopStart="8dp"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorPrimary"
-                        app:prefixText="₺">
+                        android:orientation="horizontal">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etAmount"
-                            android:layout_width="match_parent"
+                        <!-- Para Birimi Seçimi -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilCurrency"
+                            style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:inputType="numberDecimal" />
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:hint="Para Birimi"
+                            app:boxCornerRadiusBottomEnd="8dp"
+                            app:boxCornerRadiusBottomStart="8dp"
+                            app:boxCornerRadiusTopEnd="8dp"
+                            app:boxCornerRadiusTopStart="8dp"
+                            app:boxStrokeColor="?attr/colorPrimary"
+                            app:hintTextColor="?attr/colorPrimary">
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                            <AutoCompleteTextView
+                                android:id="@+id/spinnerCurrency"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="none"
+                                android:text="₺ TRY" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- Tutar -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilAmount"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:hint="@string/amount"
+                            app:boxCornerRadiusBottomEnd="8dp"
+                            app:boxCornerRadiusBottomStart="8dp"
+                            app:boxCornerRadiusTopEnd="8dp"
+                            app:boxCornerRadiusTopStart="8dp"
+                            app:boxStrokeColor="?attr/colorPrimary"
+                            app:hintTextColor="?attr/colorPrimary">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etAmount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberDecimal" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
 
                     <!-- Tarih -->
                     <com.google.android.material.textfield.TextInputLayout

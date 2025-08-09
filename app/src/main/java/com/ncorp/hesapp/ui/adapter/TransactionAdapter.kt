@@ -93,6 +93,8 @@ class TransactionAdapter(
                     TransactionType.EXPENSE -> R.drawable.ic_expense
                     TransactionType.DEBT -> R.drawable.ic_debt
                     TransactionType.RECEIVABLE -> R.drawable.ic_receivable
+                    TransactionType.DEBT_PAYMENT -> R.drawable.ic_debt
+                    TransactionType.RECEIVABLE_COLLECTION -> R.drawable.ic_receivable
                 }
                 ivTransactionType.setImageResource(iconRes)
                 
@@ -102,6 +104,8 @@ class TransactionAdapter(
                     TransactionType.EXPENSE -> R.color.error
                     TransactionType.DEBT -> R.color.error
                     TransactionType.RECEIVABLE -> R.color.success
+                    TransactionType.DEBT_PAYMENT -> R.color.error
+                    TransactionType.RECEIVABLE_COLLECTION -> R.color.success
                 }
                 tvAmount.setTextColor(ContextCompat.getColor(itemView.context, colorRes))
                 

@@ -114,9 +114,15 @@ class TransactionRepository @Inject constructor(
      * İşlem ekle
      */
     suspend fun insertTransaction(transaction: Transaction): Long {
-        val transactionId = transactionDao.insertTransaction(transaction)
-        // Veri eklendikten sonra cache'i temizle (opsiyonel)
-        return transactionId
+        return try {
+            val transactionId = transactionDao.insertTransaction(transaction)
+            if (transactionId <= 0) {
+                throw Exception("İşlem kaydedilemedi")
+            }
+            transactionId
+        } catch (e: Exception) {
+            throw Exception("İşlem eklenirken hata oluştu: ${e.message}", e)
+        }
     }
 
     /**
@@ -130,21 +136,33 @@ class TransactionRepository @Inject constructor(
      * İşlem güncelle
      */
     suspend fun updateTransaction(transaction: Transaction) {
-        transactionDao.updateTransaction(transaction)
+        try {
+            transactionDao.updateTransaction(transaction)
+        } catch (e: Exception) {
+            throw Exception("İşlem güncellenirken hata oluştu: ${e.message}", e)
+        }
     }
 
     /**
      * İşlem sil
      */
     suspend fun deleteTransaction(transaction: Transaction) {
-        transactionDao.deleteTransaction(transaction)
+        try {
+            transactionDao.deleteTransaction(transaction)
+        } catch (e: Exception) {
+            throw Exception("İşlem silinirken hata oluştu: ${e.message}", e)
+        }
     }
 
     /**
      * ID'ye göre işlem getir
      */
     suspend fun getTransactionById(id: Long): Transaction? {
-        return transactionDao.getTransactionById(id)
+        return try {
+            transactionDao.getTransactionById(id)
+        } catch (e: Exception) {
+            throw Exception("İşlem getirilirken hata oluştu: ${e.message}", e)
+        }
     }
 
     /**
@@ -207,45 +225,56 @@ class TransactionRepository @Inject constructor(
      * Toplu işlem ekleme (batch insert for better performance)
      */
     suspend fun insertTransactions(transactions: List<Transaction>): List<Long> {
-        return transactionDao.insertTransactions(transactions)
+        return try {
+            if (transactions.isEmpty()) {
+                throw Exception("Eklenecek işlem listesi boş")
+            }
+            transactionDao.insertTransactions(transactions)
+        } catch (e: Exception) {
+            throw Exception("Toplu işlem eklenirken hata oluştu: ${e.message}", e)
+        }
     }
 
     /**
      * Örnek veriler ekle (test için) - optimized batch insert
      */
     suspend fun insertSampleData() {
-        val sampleTransactions = listOf(
-            Transaction(
-                type = TransactionType.INCOME,
-                description = "Müşteri ödemesi",
-                category = "Satış",
-                amount = 1250.0,
-                date = Date()
-            ),
-            Transaction(
-                type = TransactionType.EXPENSE,
-                description = "Ofis malzemeleri",
-                category = "Gider",
-                amount = 150.0,
-                date = Date()
-            ),
-            Transaction(
-                type = TransactionType.DEBT,
-                description = "Tedarikçi borcu",
-                category = "Borç",
-                amount = 500.0,
-                date = Date()
-            ),
-            Transaction(
-                type = TransactionType.RECEIVABLE,
-                description = "Müşteri alacağı",
-                category = "Alacak",
-                amount = 800.0,
-                date = Date()
+        try {
+            val sampleTransactions = listOf(
+                Transaction(
+                    type = TransactionType.INCOME,
+                    description = "Müşteri ödemesi",
+                    category = "Satış",
+                    amount = 1250.0,
+                    date = Date()
+                ),
+                Transaction(
+                    type = TransactionType.EXPENSE,
+                    description = "Ofis malzemeleri",
+                    category = "Gider",
+                    amount = 150.0,
+                    date = Date()
+                ),
+                Transaction(
+                    type = TransactionType.DEBT,
+                    description = "Tedarikçi borcu",
+                    category = "Borç",
+                    amount = 500.0,
+                    date = Date()
+                ),
+                Transaction(
+                    type = TransactionType.RECEIVABLE,
+                    description = "Müşteri alacağı",
+                    category = "Alacak",
+                    amount = 800.0,
+                    date = Date()
+                )
             )
-        )
 
-        // Use batch insert for better performance
-        transactionDao.insertTransactions(sampleTransactions)
+            // Use batch insert for better performance
+            transactionDao.insertTransactions(sampleTransactions)
+        } catch (e: Exception) {
+            throw Exception("Örnek veriler eklenirken hata oluştu: ${e.message}", e)
+        }
     }
 } 

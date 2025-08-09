@@ -26,4 +26,8 @@
     <color name="surface_dark">#1c1b1f</color>
     <color name="on_surface_light">#0e323d</color>
     <color name="on_surface_dark">#e6e1e5</color>
+    
+    <!-- Splash -->
+    <color name="splash_background">#8B0000</color>
+    <color name="splash_indicator">#FFFFFF</color>
 </resources>
